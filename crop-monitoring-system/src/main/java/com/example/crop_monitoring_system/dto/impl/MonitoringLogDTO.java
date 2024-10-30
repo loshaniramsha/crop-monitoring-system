@@ -1,12 +1,6 @@
 package com.example.crop_monitoring_system.dto.impl;
 
 import com.example.crop_monitoring_system.dto.MonitoringLogStates;
-import com.example.crop_monitoring_system.entity.impl.CropEntity;
-import com.example.crop_monitoring_system.entity.impl.FieldEntity;
-import com.example.crop_monitoring_system.entity.impl.StaffEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

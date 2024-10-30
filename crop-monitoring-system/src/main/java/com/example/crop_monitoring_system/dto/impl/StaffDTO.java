@@ -3,10 +3,7 @@ package com.example.crop_monitoring_system.dto.impl;
 import com.example.crop_monitoring_system.dto.StaffStates;
 import com.example.crop_monitoring_system.entity.Gender;
 import com.example.crop_monitoring_system.entity.Role;
-import com.example.crop_monitoring_system.entity.impl.FieldEntity;
-import com.example.crop_monitoring_system.entity.impl.MonitoringLogEntity;
-import com.example.crop_monitoring_system.entity.impl.VehicleEntity;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
