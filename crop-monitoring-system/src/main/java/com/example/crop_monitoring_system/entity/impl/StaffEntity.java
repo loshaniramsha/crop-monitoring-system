@@ -49,8 +49,12 @@ public class StaffEntity implements SuperEntity {
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "field_id")
     )
-    private List<FieldEntity> fields = new ArrayList<>();
+    private List<FieldEntity> fields;
 
     @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<VehicleEntity> vehicles = new ArrayList<>();
+    private List<VehicleEntity> vehicles;
+
+    @ManyToOne
+    @JoinColumn(name = "logId",nullable = false)
+    private MonitoringLogEntity log;
 }
