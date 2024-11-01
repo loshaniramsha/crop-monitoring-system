@@ -4,6 +4,8 @@ import com.example.crop_monitoring_system.dao.UserDAO;
 import com.example.crop_monitoring_system.dto.impl.UserDTO;
 import com.example.crop_monitoring_system.service.UserService;
 import com.example.crop_monitoring_system.utills.Mapping;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     @Autowired
     private Mapping mapping;
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public void saveUser(UserDTO userDTO) {
 
