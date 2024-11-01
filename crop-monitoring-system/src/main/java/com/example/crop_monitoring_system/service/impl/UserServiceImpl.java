@@ -41,4 +41,9 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsers() {
         return List.of();
     }
+
+    @Override
+    public String generateUserId() {
+        return "";
+    }
 }
