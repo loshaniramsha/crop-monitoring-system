@@ -18,14 +18,12 @@ public class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO) {
-        if (userDTO.getRole().equals(Role.ADMIN)){
+        // Check if the role is either ADMIN, MANAGER, or SCIENTIST
+        if (userDTO.getRole() == Role.ADMIN || userDTO.getRole() == Role.MANAGER || userDTO.getRole() == Role.SCIENTIST) {
             userService.saveUser(userDTO);
             return ResponseEntity.ok("User saved successfully");
-        }else {
-            return ResponseEntity.ok("User not saved. Only Admin can save");
+        } else {
+            return ResponseEntity.ok("User not saved. Only Admin, Manager, or Scientist can save");
         }
-
     }
-
-
 }
