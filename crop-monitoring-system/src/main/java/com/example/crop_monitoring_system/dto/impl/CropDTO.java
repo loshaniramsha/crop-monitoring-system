@@ -11,13 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class CropDTO implements CropStates {
-
     private String cropCode;
     private String cropName;
     private String scientificName;
     private String cropImage;
     private String category;
     private String cropSeason;
-    private List<FieldDTO> fielList;
+    private String fieldCode;
+    private String LogId;
 
 }
