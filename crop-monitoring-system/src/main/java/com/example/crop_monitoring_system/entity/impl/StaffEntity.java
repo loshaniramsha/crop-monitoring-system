@@ -54,6 +54,9 @@ public class StaffEntity implements SuperEntity {
     @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VehicleEntity> vehicles;
 
+    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<EquipmentEntity> equipments;
+
     @ManyToOne
     @JoinColumn(name = "logId",nullable = false)
     private MonitoringLogEntity log;
