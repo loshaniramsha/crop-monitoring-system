@@ -15,9 +15,9 @@ import java.util.List;
 public class EquipmentDTO implements EquipmentStates {
     private String equipmentId;
     private String equipmentName;
-    private Enum<EquipmentType> equipmentType;
-    private Enum<States> state;
-    private List<FieldDTO> field;
-    private List<StaffDTO> staff;
+    private String equipmentType;
+    private States state;
+    private String field;
+    private String staff;
 
 }
