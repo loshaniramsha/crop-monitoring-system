@@ -10,5 +10,4 @@ public interface UserService {
     void deleteUser(String userId);
     UserDTO getSelectedUser(String userId);
     List<UserDTO> getAllUsers();
-    String generateUserId();
 }
