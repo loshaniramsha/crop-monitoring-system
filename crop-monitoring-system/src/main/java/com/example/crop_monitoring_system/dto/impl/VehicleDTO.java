@@ -10,11 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class VehicleDTO implements VehicleStates {
-
     private String vehicleCode;
     private String licensePlateNumber;
     private String vehicleType;
-    private States state;
-    private StaffDTO staff;
+    private String state;  // Changed to String for simplified handling
+    private String staffId; // Changed to String to hold just the ID reference
     private String remark;
 }
