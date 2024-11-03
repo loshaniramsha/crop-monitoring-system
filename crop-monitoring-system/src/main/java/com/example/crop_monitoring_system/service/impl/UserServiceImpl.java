@@ -4,6 +4,7 @@ import com.example.crop_monitoring_system.dao.UserDAO;
 import com.example.crop_monitoring_system.dto.impl.UserDTO;
 import com.example.crop_monitoring_system.entity.impl.UserEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
+import com.example.crop_monitoring_system.exception.NotFoundException;
 import com.example.crop_monitoring_system.service.UserService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.persistence.EntityManager;
@@ -37,14 +38,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(String userId, UserDTO userDTO) {
-        Optional<UserEntity> searched=userDAO.findById(userId);
-        if (searched.isPresent()){
+        Optional<UserEntity> selectUser=userDAO.findById(userId);
+        if (selectUser.isPresent()){
             userDAO.save(mapping.toUserEntity(userDTO));
         }
         else {
-            throw new DataPersistException("User"+userId+"not found");
+            throw new NotFoundException("User"+userId+"not found");
         }
-
     }
 
     @Override
@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService {
         else {
             throw new DataPersistException("User"+userId+"not found");
         }
-
     }
 
     @Override
