@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,6 +32,14 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public void updateVehicle(String vehicleCode, VehicleDTO vehicleDTO) {
+        Optional<VehicleEntity> selectVehicle=vehicleDAO.findById(vehicleCode);
+        if (selectVehicle.isPresent()){
+            vehicleDAO.save(mapping.toVehicleEntity(vehicleDTO));
+
+        }
+        else {
+            new DataPersistException("Vehicle not found");
+        }
 
     }
 
