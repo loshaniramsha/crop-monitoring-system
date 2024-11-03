@@ -64,4 +64,9 @@ public class VehicleController {
         }
     }
 
+    @GetMapping(value = "/{vehicleCode}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public VehicleDTO getSelectedVehicle(@PathVariable("vehicleCode") String vehicleCode){
+        return vehicleService.getSelectedVehicle(vehicleCode);
+    }
+
 }
