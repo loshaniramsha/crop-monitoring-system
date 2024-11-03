@@ -45,7 +45,12 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public void deleteVehicle(String vehicleCode) {
-
+        if (vehicleDAO.existsById(vehicleCode)){
+            vehicleDAO.deleteById(vehicleCode);
+        }
+        else {
+            throw new DataPersistException("Vehicle not found");
+        }
     }
 
     @Override
