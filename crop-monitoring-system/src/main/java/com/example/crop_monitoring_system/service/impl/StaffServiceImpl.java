@@ -2,6 +2,8 @@ package com.example.crop_monitoring_system.service.impl;
 
 import com.example.crop_monitoring_system.dao.StaffDAO;
 import com.example.crop_monitoring_system.dto.impl.StaffDTO;
+import com.example.crop_monitoring_system.entity.impl.StaffEntity;
+import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.StaffService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
@@ -19,6 +21,10 @@ public class StaffServiceImpl implements StaffService {
     private Mapping mapping;
     @Override
     public void saveStaff(StaffDTO staffDTO) {
+        StaffEntity saveStaff=staffDAO.save(mapping.toStaffEntity(staffDTO));
+        if (saveStaff==null){
+            throw new DataPersistException("Staff not saved");
+        }
 
     }
 
@@ -40,5 +46,15 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<StaffDTO> getAllStaffs() {
         return List.of();
+    }
+
+    @Override
+    public String generateStaffId() {
+        String staffId=staffDAO.generateStaffId();
+        if (staffId==null){
+            return "ST001";
+        }
+      int newStaffId=Integer.parseInt(staffId.replace("ST",""))+1;
+      return String.format("ST%03d",newStaffId);
     }
 }
