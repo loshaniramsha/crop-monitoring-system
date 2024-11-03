@@ -10,4 +10,5 @@ public interface StaffService {
     void deleteStaff(String staffId);
     StaffDTO getSelectedStaff(String staffId);
     List<StaffDTO> getAllStaffs();
+    String generateStaffId();
 }
