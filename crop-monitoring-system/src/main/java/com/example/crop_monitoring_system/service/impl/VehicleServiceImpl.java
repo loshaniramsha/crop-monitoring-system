@@ -55,7 +55,13 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleDTO getSelectedVehicle(String vehicleCode) {
-        return null;
+        Optional<VehicleEntity> searched=vehicleDAO.findById(vehicleCode);
+        if (searched.isPresent()){
+            return mapping.toVehicleDTO(searched.get());
+        }
+        else {
+            throw new DataPersistException("Vehicle not found");
+        }
     }
 
     @Override
