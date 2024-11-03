@@ -36,8 +36,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public void updateUser(String userId, UserDTO userDTO) {
+    @Override public void updateUser(String userId, UserDTO userDTO) {
         Optional<UserEntity> selectUser=userDAO.findById(userId);
         if (selectUser.isPresent()){
             userDAO.save(mapping.toUserEntity(userDTO));
