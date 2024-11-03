@@ -31,6 +31,21 @@ public class UserController {
             return ResponseEntity.ok("User not saved. Only Admin, Manager, or Scientist can save");
         }
     }
+
+    @PutMapping(value = "/{email}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateUser(@PathVariable("email") String email, @RequestBody UserDTO userDTO) {
+        try {
+            userService.updateUser(email, userDTO); // Call the service to update the user
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Return 204 No Content on successful update
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 if user not found
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // Return 500 on error
+        }
+    }
+
     @DeleteMapping(value = "/{email}")
     public ResponseEntity<Void> deleteUser(@PathVariable("email") String email) {
         try {
@@ -44,7 +59,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // Return 500 on error
         }
     }
-
 
     @GetMapping(value = "/{email}",produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDTO getUser(@PathVariable("email") String email) throws NotFoundException {
