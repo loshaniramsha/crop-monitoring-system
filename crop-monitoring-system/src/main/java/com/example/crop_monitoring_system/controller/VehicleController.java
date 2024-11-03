@@ -2,15 +2,14 @@ package com.example.crop_monitoring_system.controller;
 
 import com.example.crop_monitoring_system.dto.impl.VehicleDTO;
 import com.example.crop_monitoring_system.exception.DataPersistException;
+import com.example.crop_monitoring_system.exception.NotFoundException;
 import com.example.crop_monitoring_system.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.Repository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/vehicle")
@@ -33,5 +32,23 @@ public class VehicleController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping(value = "/{vehicleCode}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateVehicle(@PathVariable("vehicleCode") String vehicleCode, @RequestBody VehicleDTO vehicleDTO){
+        try {
+            vehicleDTO.setVehicleCode(vehicleCode);
+            vehicleService.updateVehicle(vehicleCode,vehicleDTO);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        catch (NotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        catch (DataPersistException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }
