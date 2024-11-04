@@ -59,7 +59,13 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public EquipmentDTO getSelectedEquipment(String equipmentId) {
-        return null;
+        Optional<EquipmentEntity> searched = equipmentDAO.findById(equipmentId);
+        if (searched.isPresent()){
+            return mapping.toEquipmentDTO(searched.get());
+        }
+        else {
+            throw new NotFoundException("Equipment not found");
+        }
     }
 
     @Override

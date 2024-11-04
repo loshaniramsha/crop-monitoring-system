@@ -46,7 +46,7 @@ public class EquipmentController {
         }
     }
     @DeleteMapping("/{equipmentId}")
-    public ResponseEntity<Void> deleteequipment(@PathVariable String equipmentId) {
+    public ResponseEntity<Void> deleteequipment(@PathVariable("equipmentId") String equipmentId) {
         try {
             equipmentService.deleteEquipment(equipmentId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content for successful deletion
@@ -56,6 +56,10 @@ public class EquipmentController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // Handle other exceptions
         }
+    }
+    @GetMapping(value = "/{equipmentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public EquipmentDTO getEquipment(@PathVariable("equipmentId") String equipmentId) {
+        return equipmentService.getSelectedEquipment(equipmentId);
     }
 
 
