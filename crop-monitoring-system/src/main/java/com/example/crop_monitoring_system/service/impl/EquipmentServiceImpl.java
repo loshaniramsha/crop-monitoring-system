@@ -56,7 +56,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public List<EquipmentDTO> getAllEquipment() {
-        return List.of();
+       return mapping.toEquipmentDTOList(equipmentDAO.findAll());
     }
 
     @Override
