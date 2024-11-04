@@ -42,7 +42,7 @@ public class FieldEntity implements SuperEntity {
     private String fieldImage2;
 
     @ManyToOne
-    @JoinColumn(name = "logId",nullable = false)
+    @JoinColumn(name = "logId")
     private MonitoringLogEntity log;
 
 }
