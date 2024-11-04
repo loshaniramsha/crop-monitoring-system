@@ -4,9 +4,12 @@ import com.example.crop_monitoring_system.dao.EquipmentDAO;
 import com.example.crop_monitoring_system.dto.impl.EquipmentDTO;
 import com.example.crop_monitoring_system.entity.impl.EquipmentEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
+import com.example.crop_monitoring_system.exception.NotFoundException;
 import com.example.crop_monitoring_system.service.EquipmentService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +49,13 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public void deleteEquipment(String equipmentId) {
-
+        if (equipmentDAO.existsById(equipmentId)) {
+            equipmentDAO.deleteById(equipmentId);
+        } else {
+            throw new NotFoundException("Equipment not found");
+        }
     }
+
 
     @Override
     public EquipmentDTO getSelectedEquipment(String equipmentId) {
