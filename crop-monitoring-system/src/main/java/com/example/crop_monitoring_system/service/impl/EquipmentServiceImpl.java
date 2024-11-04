@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class EquipmentServiceImpl implements EquipmentService {
@@ -32,7 +34,14 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public void updateEquipment(String equipmentId, EquipmentDTO equipmentDTO) {
-
+        Optional<EquipmentEntity> updateEntity = equipmentDAO.findById(equipmentId);
+        if (updateEntity.isPresent()) {
+            EquipmentEntity entityToUpdate = mapping.toEquipmentEntity(equipmentDTO);
+            entityToUpdate.setEquipmentId(updateEntity.get().getEquipmentId()); // Ensure the ID is set before saving
+            equipmentDAO.save(entityToUpdate);
+        } else {
+            throw new DataPersistException("Failed to update equipment");
+        }
     }
 
     @Override
