@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface EquipmentDAO extends JpaRepository<EquipmentEntity,String> {
-    @Query("SELECT e FROM EquipmentEntity e WHERE e.equipmentId = ?1")
+    @Query("SELECT MAX(e.equipmentId) FROM EquipmentEntity e")
     String generateEquipmentId();
 }
