@@ -21,11 +21,8 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public void saveEquipment(EquipmentDTO equipmentDTO) {
-        // Generate and set the ID for the new equipment
-        String generatedId = generateEquipmentId();
         EquipmentEntity equipmentEntity = mapping.toEquipmentEntity(equipmentDTO);
-        equipmentEntity.setEquipmentId(generatedId); // Ensure the ID is set
-
+        equipmentEntity.setEquipmentId(generateEquipmentId());
         EquipmentEntity savedEntity = equipmentDAO.save(equipmentEntity);
         if (savedEntity == null) {
             throw new DataPersistException("Failed to save equipment");
@@ -61,6 +58,5 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
         int id = Integer.parseInt(maxEquipmentId.replace("E00-", "")) + 1;
         return String.format("E00-%03d", id);
-
     }
 }
