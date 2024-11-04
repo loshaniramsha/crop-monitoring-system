@@ -10,4 +10,5 @@ public interface MonitoringLogService {
     void deleteMonitoringLog(String logId);
     MonitoringLogDTO getSelectedMonitoringLog(String logId);
     List<MonitoringLogDTO> getAllMonitoringLogs();
+    String generateMonitoringLogId();
 }
