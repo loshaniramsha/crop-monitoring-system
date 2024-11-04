@@ -19,7 +19,12 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
     @Autowired
     private Mapping mapping;
     @Override
-    public void saveMonitoringLog(MonitoringLogDTO monitoringLogDTO) {}
+    public void saveMonitoringLog(MonitoringLogDTO monitoringLogDTO) {
+        MonitoringLogEntity save=monitoringLOgDAO.save(mapping.toMonitoringLogEntity(monitoringLogDTO));
+        if (save==null){
+            throw new DataPersistException("Monitoring Log not saved");
+        }
+    }
 
     @Override
     public void updateMonitoringLog(String logId, MonitoringLogDTO monitoringLogDTO) {
