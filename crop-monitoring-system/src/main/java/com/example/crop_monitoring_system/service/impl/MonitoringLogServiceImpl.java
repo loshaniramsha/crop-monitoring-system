@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class MonitoringLogServiceImpl implements MonitoringLogService {
@@ -28,11 +30,24 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
 
     @Override
     public void updateMonitoringLog(String logId, MonitoringLogDTO monitoringLogDTO) {
+   /*     Optional<MonitoringLogEntity> updateLog = monitoringLOgDAO.findById(logId);
+
+        if (updateLog.isPresent()) {
+            MonitoringLogEntity logEntity = updateLog.get();
+            logEntity.setLogDate(monitoringLogDTO.getLogDate());
+            logEntity.setLogDetails(monitoringLogDTO.getLogDetails());
+            logEntity.setObservedImage(monitoringLogDTO.getObservedImage());
+
+           monitoringLOgDAO.save(logEntity);
+        } else {
+            throw new DataPersistException("Monitoring Log with ID " + logId + " not found");
+        }*/
 
     }
 
     @Override
     public void deleteMonitoringLog(String logId) {
+
 
     }
 
@@ -48,12 +63,11 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
 
     @Override
     public String generateMonitoringLogId() {
-        String maxLogId=monitoringLOgDAO.genarateMonitoringLogId();
-        if (maxLogId==null){
+        String maxLogId = monitoringLOgDAO.generateMonitoringLogId();  // Ensure this method returns a String ID
+        if (maxLogId == null) {
             return "ML001";
         }
-        int id=Integer.parseInt(maxLogId.replace("ML",""))+1;
-        return String.format("ML%03d",id);
-
+        int id = Integer.parseInt(maxLogId.replace("ML", "")) + 1;
+        return String.format("ML%03d", id);
     }
 }
