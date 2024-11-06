@@ -10,4 +10,5 @@ public interface CropService {
     void deleteCrop(String cropCode);
     CropDTO getSelectedCrop(String cropCode);
     List<CropDTO> getAllCrops();
+    String generateCropCode();
 }
