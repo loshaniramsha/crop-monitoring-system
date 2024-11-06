@@ -10,4 +10,5 @@ public interface FieldService {
     void deleteField(String fieldCode);
     FieldDTO getSelectedField(String fieldCode);
     List<FieldDTO> getAllFields();
+    String generateFieldCode();
 }
