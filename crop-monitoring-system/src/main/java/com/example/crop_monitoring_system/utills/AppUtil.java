@@ -9,4 +9,13 @@ public class AppUtil {
 
     }
 
+    public static String convertStringToPoint(String fieldLocation) {
+        String[] point = fieldLocation.split(",");
+
+        if (point.length < 2) {
+            throw new IllegalArgumentException("Invalid field location format. Expected format: 'latitude,longitude'");
+        }
+
+        return point[0].trim() + " " + point[1].trim();
+    }
 }
