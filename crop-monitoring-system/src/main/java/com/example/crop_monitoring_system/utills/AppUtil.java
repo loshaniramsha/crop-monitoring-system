@@ -1,5 +1,6 @@
 package com.example.crop_monitoring_system.utills;
 
+import java.awt.*;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -9,13 +10,9 @@ public class AppUtil {
 
     }
 
-    public static String convertStringToPoint(String fieldLocation) {
-        String[] point = fieldLocation.split(",");
-
-        if (point.length < 2) {
-            throw new IllegalArgumentException("Invalid field location format. Expected format: 'latitude,longitude'");
-        }
-
-        return point[0].trim() + " " + point[1].trim();
+    public static Point generateFieldlocation() {
+        return UUID.randomUUID().toString().substring(0, 3).getBytes().length > 0 ?
+                new Point(UUID.randomUUID().toString().substring(0, 3).getBytes()[0], UUID.randomUUID().toString().substring(0, 3).getBytes()[0]) : new Point(0, 0);
     }
+
 }
