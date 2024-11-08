@@ -26,11 +26,11 @@ public class CropServiceImpl implements CropService {
     public void saveCrop(CropDTO cropDTO) {
         CropEntity cropEntity=mapping.toCropEntity(cropDTO);
         cropEntity.setCropCode(generateCropCode());
+        System.out.println(cropEntity);
         CropEntity savedEntity=cropDAO.save(cropEntity);
         if (savedEntity==null){
             throw new RuntimeException("Failed to save crop");
         }
-
     }
 
     @Override
