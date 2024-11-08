@@ -19,24 +19,25 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("api/v1/crop")
+@RequestMapping("api/v1/crops")
 public class CropController {
 
     @Autowired
     private CropService cropService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> saveCrop(
             @RequestPart("cropName") String cropName,
             @RequestPart("scientificName") String scientificName,
-            @RequestPart("category") String category,
-            @RequestPart("season") String season,
             @RequestPart("cropImage") MultipartFile cropImage,
+            @RequestPart("category") String category,
+            @RequestPart("cropSeason") String season,
             @RequestPart("fieldCode") String fieldCode,
             @RequestPart("logId") String logId
     ) {
         String base64Image = "";
         try {
+
             byte[] image = cropImage.getBytes();
             base64Image = AppUtil.convertImageToBase64(image);
 
