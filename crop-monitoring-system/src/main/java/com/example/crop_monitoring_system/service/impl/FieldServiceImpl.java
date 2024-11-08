@@ -5,6 +5,7 @@ import com.example.crop_monitoring_system.dto.impl.FieldDTO;
 import com.example.crop_monitoring_system.entity.impl.FieldEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.FieldService;
+import com.example.crop_monitoring_system.utills.AppUtil;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public void saveField(FieldDTO fieldDTO) {
+        fieldDTO.setFieldLocation(AppUtil.generateFieldlocation());
         FieldEntity save=fieldDAO.save(mapping.toFieldEntity(fieldDTO));
         if (save==null){
             throw new DataPersistException("Field not saved");
