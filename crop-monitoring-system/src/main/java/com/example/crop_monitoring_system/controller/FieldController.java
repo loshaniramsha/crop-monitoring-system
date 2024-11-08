@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.IOException;
 
 @RestController
@@ -28,7 +29,8 @@ public class FieldController {
             @RequestPart("fieldLocation") String fieldLocation,
             @RequestPart("extentSize") String extentSize,
             @RequestPart("fieldImage1") MultipartFile fieldImage1,
-            @RequestPart("fieldImage2") MultipartFile fieldImage2
+            @RequestPart("fieldImage2") MultipartFile fieldImage2,
+            @RequestPart("logId") String logId
     ){
         String base64Image1="";
         String base64Image2="";
@@ -43,7 +45,8 @@ public class FieldController {
                 FieldDTO fieldDTO=new FieldDTO();
                 fieldDTO.setFieldCode(feildCode);
                 fieldDTO.setFieldName(fieldName);
-                fieldDTO.setFieldLocation(AppUtil.convertStringToPoint(fieldLocation));
+                fieldDTO.setLog(logId);
+                fieldDTO.setFieldLocation(null);
                 fieldDTO.setExtentSize(Double.parseDouble(extentSize));
                 fieldDTO.setFieldImage1(base64Image1);
                 fieldDTO.setFieldImage2(base64Image2);
