@@ -13,12 +13,12 @@ import java.util.List;
 public class FieldDTO implements FieldStates {
     private String fieldCode;
     private String fieldName;
-    private String fieldLocation;
+    private Point fieldLocation;
     private Double extentSize;
     private List<CropDTO> crops;
     private List<StaffDTO> staffs;
     private List<EquipmentDTO> equipments;
     private String fieldImage1;
     private String fieldImage2;
-    private MonitoringLogDTO log;
+    private String log;
 }
