@@ -39,5 +39,7 @@ public class StaffDTO implements StaffStates {
     private List<FieldDTO> fields;
     private List<VehicleDTO> vehicles;
     private List<EquipmentDTO> equipment;
-    private MonitoringLogDTO log;
+
+    //private MonitoringLogDTO log;
+    private String logId;
 }
