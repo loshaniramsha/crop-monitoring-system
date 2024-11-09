@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,7 +31,26 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void updateStaff(String staffId, StaffDTO staffDTO) {
-
+        Optional<StaffEntity> optionalStaff = staffDAO.findById(staffId);
+        if (optionalStaff.isPresent()) {
+            StaffEntity staffEntity = optionalStaff.get();
+            staffEntity.setFirstName(staffDTO.getFirstName());
+            staffEntity.setLastName(staffDTO.getLastName());
+            staffEntity.setDesignation(staffDTO.getDesignation());
+            staffEntity.setGender(staffDTO.getGender());
+            staffEntity.setJoiningDate(staffDTO.getJoiningDate());
+            staffEntity.setBirthDate(staffDTO.getBirthDate());
+            staffEntity.setAddressLine1(staffDTO.getAddressLine1());
+            staffEntity.setAddressLine2(staffDTO.getAddressLine2());
+            staffEntity.setAddressLine3(staffDTO.getAddressLine3());
+            staffEntity.setAddressLine4(staffDTO.getAddressLine4());
+            staffEntity.setAddressLine5(staffDTO.getAddressLine5());
+            staffEntity.setPhoneNumber(staffDTO.getPhoneNumber());
+            staffEntity.setEmail(staffDTO.getEmail());
+            staffDAO.save(staffEntity);
+        } else {
+            throw new DataPersistException("Staff not found");
+        }
     }
 
     @Override
