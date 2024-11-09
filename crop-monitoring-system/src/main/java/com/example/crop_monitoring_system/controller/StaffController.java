@@ -44,6 +44,7 @@ public class StaffController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @DeleteMapping("/{staffId}")
     public ResponseEntity<Void> deleteStaff(@PathVariable("staffId") String staffId) {
         try {
@@ -54,6 +55,7 @@ public class StaffController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping(value = "/{staffId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StaffDTO> getSelectedStaff(@PathVariable("staffId") String staffId) {
         try {
@@ -64,8 +66,6 @@ public class StaffController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<StaffDTO> getAllStaffs(){
