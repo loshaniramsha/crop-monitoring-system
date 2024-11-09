@@ -55,7 +55,12 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void deleteStaff(String staffId) {
-
+        if (staffDAO.existsById(staffId)) {
+            staffDAO.deleteById(staffId);
+        }
+        else {
+            throw new DataPersistException("Staff not found");
+        }
     }
 
     @Override
