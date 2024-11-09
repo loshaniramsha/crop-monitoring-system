@@ -33,6 +33,20 @@ public class StaffController {
         }
     }
 
+    @PutMapping(value = "/{staffId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateStaff(@PathVariable("staffId") String staffId, @RequestBody StaffDTO staffDTO) {
+        try {
+            staffDTO.setStaffId(staffId);
+            staffService.updateStaff(staffId, staffDTO);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<StaffDTO> getAllStaffs(){
         return staffService.getAllStaffs();
