@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/monitoringlog")
@@ -77,6 +78,10 @@ public class MonitoringLogController {
     @GetMapping(value = "/{logCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MonitoringLogDTO getSelectedLog(@PathVariable("logCode") String logCode) {
         return monitoringLogService.getSelectedMonitoringLog(logCode);
+    }
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MonitoringLogDTO> getAllLogs() {
+        return monitoringLogService.getAllMonitoringLogs();
     }
 
 }
