@@ -74,6 +74,10 @@ public class MonitoringLogController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping(value = "/{logCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public MonitoringLogDTO getSelectedLog(@PathVariable("logCode") String logCode) {
+        return monitoringLogService.getSelectedMonitoringLog(logCode);
+    }
 
 }
 
