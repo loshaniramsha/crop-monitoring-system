@@ -62,6 +62,7 @@ public class MonitoringLogController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
+
     @DeleteMapping("/{logCode}")
     public ResponseEntity<Void> deleteLog(@PathVariable String logCode) {
         try {
@@ -75,10 +76,12 @@ public class MonitoringLogController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping(value = "/{logCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MonitoringLogDTO getSelectedLog(@PathVariable("logCode") String logCode) {
         return monitoringLogService.getSelectedMonitoringLog(logCode);
     }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MonitoringLogDTO> getAllLogs() {
         return monitoringLogService.getAllMonitoringLogs();
