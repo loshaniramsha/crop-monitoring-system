@@ -39,8 +39,12 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
 
     @Override
     public void deleteMonitoringLog(String logId) {
-
-
+        if (monitoringLOgDAO.existsById(logId)){
+            monitoringLOgDAO.deleteById(logId);
+        }
+        else {
+            throw  new DataPersistException("Monitoring Log not found");
+        }
     }
 
     @Override
