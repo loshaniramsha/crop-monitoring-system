@@ -47,10 +47,24 @@ public class MonitoringLogController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PutMapping(value = "/{logCode}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateLog(@PathVariable String logCode, @RequestBody MonitoringLogDTO monitoringLogDTO) {
+    try {
+        monitoringLogService.updateMonitoringLog(logCode, monitoringLogDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    } catch (DataPersistException e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+    }
+    @DeleteMapping("/{logCode}")
+    public ResponseEntity<Void> deleteLog(@PathVariable String logCode) {
         try {
-            monitoringLogService.updateMonitoringLog(logCode, monitoringLogDTO);
+            monitoringLogService.deleteMonitoringLog(logCode);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (DataPersistException e) {
             e.printStackTrace();
@@ -60,5 +74,6 @@ public class MonitoringLogController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
 
