@@ -1,6 +1,7 @@
 package com.example.crop_monitoring_system.controller;
 
 import com.example.crop_monitoring_system.dto.impl.VehicleDTO;
+import com.example.crop_monitoring_system.entity.States;
 import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.exception.NotFoundException;
 import com.example.crop_monitoring_system.service.VehicleService;
@@ -19,21 +20,27 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveVehicle(@RequestBody VehicleDTO vehicleDTO){
-        try {
-            vehicleService.saveVehicle(vehicleDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<Void> saveVehicle(@RequestBody VehicleDTO vehicleDTO) {
+    try {
+        // Check if the state is not null and is a valid enum value
+        if (vehicleDTO.getState() != null) {
+            States state = States.valueOf(vehicleDTO.getState().toUpperCase()); // Convert String to enum
+            if (state == States.AVAILABLE || state == States.NOT_AVAILABLE) {
+                vehicleService.saveVehicle(vehicleDTO);
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            }
         }
-        catch (DataPersistException e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        // Return 400 Bad Request if the state is invalid or null
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    } catch (IllegalArgumentException e) {
+        // If state conversion to enum fails, return 400 Bad Request
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    } catch (DataPersistException e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
     @PutMapping(value = "/{vehicleCode}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateVehicle(@PathVariable("vehicleCode") String vehicleCode, @RequestBody VehicleDTO vehicleDTO){
