@@ -49,7 +49,13 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
 
     @Override
     public MonitoringLogDTO getSelectedMonitoringLog(String logId) {
-        return null;
+        Optional<MonitoringLogEntity> searched=monitoringLOgDAO.findById(logId);
+        if (searched.isPresent()){
+            return mapping.toMonitoringLogDTO(searched.get());
+        }
+        else {
+            throw new DataPersistException("Monitoring Log not found");
+        }
     }
 
     @Override
