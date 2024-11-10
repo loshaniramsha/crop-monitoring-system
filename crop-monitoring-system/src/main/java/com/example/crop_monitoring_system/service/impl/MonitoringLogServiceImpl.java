@@ -60,7 +60,7 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
 
     @Override
     public List<MonitoringLogDTO> getAllMonitoringLogs() {
-        return List.of();
+        return mapping.toMonitoringLogDTOList(monitoringLOgDAO.findAll());
     }
 
     @Override
