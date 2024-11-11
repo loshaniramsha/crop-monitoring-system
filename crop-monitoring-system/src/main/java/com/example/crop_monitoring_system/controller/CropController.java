@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -63,5 +60,40 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping(value = "/{cropCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateCrop(
+            @PathVariable("cropCode") String cropCode,
+            @RequestPart("cropName") String cropName,
+            @RequestPart("scientificName") String scientificName,
+            @RequestPart("cropImage") MultipartFile cropImage,
+            @RequestPart("category") String category,
+            @RequestPart("cropSeason") String cropSeason,
+            @RequestPart("fieldCode") String fieldCode,
+            @RequestPart("logId") String logId
+    ) {
+        try {
+            // Convert the crop image to Base64
+            String base64Image = AppUtil.convertImageToBase64(cropImage.getBytes());
+
+            // Create and populate CropDTO
+            CropDTO cropDTO = new CropDTO();
+            cropDTO.setCropName(cropName);
+            cropDTO.setScientificName(scientificName);
+            cropDTO.setCropImage(base64Image);
+            cropDTO.setCategory(category);
+            cropDTO.setCropSeason(cropSeason);
+            cropDTO.setFieldCode(fieldCode);
+            cropDTO.setLogId(logId);
+
+            // Update crop
+            cropService.updateCrop(cropCode, cropDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
 
