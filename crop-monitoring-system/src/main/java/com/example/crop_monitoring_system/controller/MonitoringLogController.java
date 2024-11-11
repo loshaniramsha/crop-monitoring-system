@@ -49,18 +49,30 @@ public class MonitoringLogController {
         }
     }
 
-    @PutMapping(value = "/{logCode}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateLog(@PathVariable String logCode, @RequestBody MonitoringLogDTO monitoringLogDTO) {
-    try {
-        monitoringLogService.updateMonitoringLog(logCode, monitoringLogDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
-    } catch (DataPersistException e) {
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    } catch (Exception e) {
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-       }
+    @PutMapping(value = "/{logCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateLog(
+            @PathVariable("logCode") String logCode,
+            @RequestPart("logDate") String logDate,
+            @RequestPart("logDetails") String logDetails,
+            @RequestPart("observedImage") MultipartFile observedImage
+    ){
+        try {
+            byte[] image=observedImage.getBytes();
+            String base64Image=AppUtil.convertImageToBase64(image);
+            MonitoringLogDTO monitoringLogDTO=new MonitoringLogDTO();
+            monitoringLogDTO.setLogCode(logCode);
+            monitoringLogDTO.setLogDate(logDate);
+            monitoringLogDTO.setLogDetails(logDetails);
+            monitoringLogDTO.setObservedImage(base64Image);
+            monitoringLogService.updateMonitoringLog(logCode,monitoringLogDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{logCode}")
