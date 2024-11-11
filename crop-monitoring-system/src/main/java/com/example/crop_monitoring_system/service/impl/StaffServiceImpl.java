@@ -1,7 +1,9 @@
 package com.example.crop_monitoring_system.service.impl;
 
+import com.example.crop_monitoring_system.dao.MonitoringLOgDAO;
 import com.example.crop_monitoring_system.dao.StaffDAO;
 import com.example.crop_monitoring_system.dto.impl.StaffDTO;
+import com.example.crop_monitoring_system.entity.impl.MonitoringLogEntity;
 import com.example.crop_monitoring_system.entity.impl.StaffEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.StaffService;
@@ -19,12 +21,26 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private StaffDAO staffDAO;
     @Autowired
+    private MonitoringLOgDAO monitoringLOgDAO;
+    @Autowired
     private Mapping mapping;
     @Override
-    public void saveStaff(StaffDTO staffDTO) {
+    public void saveStaff(StaffDTO staffDTO) {    staffDTO.setStaffId(generateStaffId());
         staffDTO.setStaffId(generateStaffId());
-        StaffEntity save=staffDAO.save(mapping.toStaffEntity(staffDTO));
-        if (save==null){
+        StaffEntity staffEntity = mapping.toStaffEntity(staffDTO);
+
+        // Set the log entity if logId is provided
+        if (staffDTO.getLogId() != null) {
+            Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(staffDTO.getLogId());
+            if (logEntityOptional.isPresent()) {
+                staffEntity.setLog(logEntityOptional.get());
+            } else {
+                throw new DataPersistException("Monitoring Log not found with ID: " + staffDTO.getLogId());
+            }
+        }
+
+        StaffEntity saved = staffDAO.save(staffEntity);
+        if (saved == null) {
             throw new DataPersistException("Staff not saved");
         }
     }
