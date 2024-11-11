@@ -42,22 +42,25 @@ public ResponseEntity<Void> saveVehicle(@RequestBody VehicleDTO vehicleDTO) {
     }
 }
 
-    @PutMapping(value = "/{vehicleCode}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateVehicle(@PathVariable("vehicleCode") String vehicleCode, @RequestBody VehicleDTO vehicleDTO){
-        try {
-            vehicleDTO.setVehicleCode(vehicleCode);
-            vehicleService.updateVehicle(vehicleCode,vehicleDTO);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        catch (NotFoundException e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        catch (DataPersistException e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+@PutMapping(value = "/{vehicleCode}", consumes = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<Void> updateVehicle(
+        @PathVariable("vehicleCode") String vehicleCode,
+        @RequestBody VehicleDTO vehicleDTO
+) {
+    try {
+        vehicleDTO.setVehicleCode(vehicleCode);
+        vehicleService.updateVehicle(vehicleCode, vehicleDTO);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (NotFoundException e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    } catch (DataPersistException e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
 
     @DeleteMapping("/{vehicleCode}")
     public ResponseEntity<Void> deleteVehicle(@PathVariable("vehicleCode") String vehicleCode) {

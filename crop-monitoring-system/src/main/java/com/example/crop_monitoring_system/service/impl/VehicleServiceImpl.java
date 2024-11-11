@@ -40,7 +40,6 @@ public class VehicleServiceImpl implements VehicleService {
         else {
             new DataPersistException("Vehicle not found");
         }
-
     }
 
     @Override
