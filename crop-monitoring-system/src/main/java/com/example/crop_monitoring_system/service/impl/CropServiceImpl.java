@@ -61,7 +61,13 @@ public class CropServiceImpl implements CropService {
 
     @Override
     public CropDTO getSelectedCrop(String cropCode) {
-        return null;
+        Optional<CropEntity> searchedCrop=cropDAO.findById(cropCode);
+        if (searchedCrop.isPresent()){
+            return mapping.toCropDTO(searchedCrop.get());
+        }
+        else {
+            throw new DataPersistException("Crop not found");
+        }
     }
 
     @Override
