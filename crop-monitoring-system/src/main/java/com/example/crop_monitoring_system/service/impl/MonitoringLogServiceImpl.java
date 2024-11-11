@@ -30,11 +30,12 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
 
     @Override
     public void updateMonitoringLog(String logId, MonitoringLogDTO monitoringLogDTO) {
-        Optional<MonitoringLogEntity> updateLog=monitoringLOgDAO.findById(logId);
-        if (updateLog.isPresent()){
-            updateLog.get().setLogDetails(monitoringLogDTO.getLogDetails());
-            monitoringLOgDAO.save(updateLog.get());
-        }
+      Optional<MonitoringLogEntity> updateLog=monitoringLOgDAO.findById(logId);
+      if (updateLog.isPresent()){
+          updateLog.get().setLogDetails(monitoringLogDTO.getLogDetails());
+          updateLog.get().setObservedImage(monitoringLogDTO.getObservedImage());
+          monitoringLOgDAO.save(updateLog.get());
+      }
     }
 
     @Override
