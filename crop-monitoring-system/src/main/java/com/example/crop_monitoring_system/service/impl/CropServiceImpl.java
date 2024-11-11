@@ -5,6 +5,7 @@ import com.example.crop_monitoring_system.dao.FieldDAO;
 import com.example.crop_monitoring_system.dto.impl.CropDTO;
 import com.example.crop_monitoring_system.entity.impl.CropEntity;
 import com.example.crop_monitoring_system.entity.impl.FieldEntity;
+import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.CropService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
@@ -50,7 +51,12 @@ public class CropServiceImpl implements CropService {
 
     @Override
     public void deleteCrop(String cropCode) {
-
+        if (cropDAO.existsById(cropCode)){
+            cropDAO.deleteById(cropCode);
+        }
+        else {
+            throw new DataPersistException("Crop not found");
+        }
     }
 
     @Override
