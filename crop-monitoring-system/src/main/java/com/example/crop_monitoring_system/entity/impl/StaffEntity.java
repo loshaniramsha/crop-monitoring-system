@@ -60,4 +60,5 @@ public class StaffEntity implements SuperEntity {
     @ManyToOne
     @JoinColumn(name = "logId")
     private MonitoringLogEntity log;
+
 }
