@@ -4,6 +4,7 @@ package com.example.crop_monitoring_system.controller;
 
 import com.example.crop_monitoring_system.dto.impl.CropDTO;
 import com.example.crop_monitoring_system.exception.DataPersistException;
+import com.example.crop_monitoring_system.exception.NotFoundException;
 import com.example.crop_monitoring_system.service.CropService;
 import com.example.crop_monitoring_system.utills.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,21 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping("/{cropCode}")
+    public ResponseEntity<Void> deleteCrop(@PathVariable("cropCode") String cropCode) {
+        try {
+            cropService.deleteCrop(cropCode);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (NotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
