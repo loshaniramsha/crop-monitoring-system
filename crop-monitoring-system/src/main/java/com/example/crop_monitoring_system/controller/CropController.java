@@ -110,6 +110,17 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping(value = "/{cropCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CropDTO> getSelectedCrop(@PathVariable("cropCode") String cropCode) {
+        try {
+            CropDTO cropDTO = cropService.getSelectedCrop(cropCode);
+            return new ResponseEntity<>(cropDTO, HttpStatus.OK);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }
 
