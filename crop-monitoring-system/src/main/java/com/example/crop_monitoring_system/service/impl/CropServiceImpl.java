@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class CropServiceImpl implements CropService {
@@ -35,7 +37,15 @@ public class CropServiceImpl implements CropService {
 
     @Override
     public void updateCrop(String cropCode, CropDTO cropDTO) {
-
+        Optional<CropEntity> updatedCrop=cropDAO.findById(cropCode);
+        if (updatedCrop.isPresent()){
+            updatedCrop.get().setCropName(cropDTO.getCropName());
+            updatedCrop.get().setScientificName(cropDTO.getScientificName());
+            updatedCrop.get().setCropImage(cropDTO.getCropImage());
+            updatedCrop.get().setCategory(cropDTO.getCategory());
+            updatedCrop.get().setCropSeason(cropDTO.getCropSeason());
+            cropDAO.save(updatedCrop.get());
+        }
     }
 
     @Override
