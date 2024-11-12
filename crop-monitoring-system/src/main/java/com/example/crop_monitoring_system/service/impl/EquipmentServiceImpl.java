@@ -1,8 +1,13 @@
 package com.example.crop_monitoring_system.service.impl;
 
 import com.example.crop_monitoring_system.dao.EquipmentDAO;
+import com.example.crop_monitoring_system.dao.FieldDAO;
+import com.example.crop_monitoring_system.dao.StaffDAO;
 import com.example.crop_monitoring_system.dto.impl.EquipmentDTO;
+import com.example.crop_monitoring_system.entity.EquipmentType;
 import com.example.crop_monitoring_system.entity.impl.EquipmentEntity;
+import com.example.crop_monitoring_system.entity.impl.FieldEntity;
+import com.example.crop_monitoring_system.entity.impl.StaffEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.exception.NotFoundException;
 import com.example.crop_monitoring_system.service.EquipmentService;
@@ -23,11 +28,46 @@ public class EquipmentServiceImpl implements EquipmentService {
     private EquipmentDAO equipmentDAO;
     @Autowired
     private Mapping mapping;
+    @Autowired
+    private FieldDAO fieldDAO;
+    @Autowired
+    private StaffDAO staffDAO;
 
     @Override
     public void saveEquipment(EquipmentDTO equipmentDTO) {
         EquipmentEntity equipmentEntity = mapping.toEquipmentEntity(equipmentDTO);
         equipmentEntity.setEquipmentId(generateEquipmentId());
+
+        // Check and set EquipmentType
+        if (equipmentDTO.getEquipmentType() != null) {
+            try {
+                EquipmentType equipmentType = EquipmentType.valueOf(equipmentDTO.getEquipmentType().toUpperCase());
+                equipmentEntity.setEquipmentType(equipmentType);
+            } catch (IllegalArgumentException e) {
+                throw new DataPersistException("Invalid Equipment Type: " + equipmentDTO.getEquipmentType());
+            }
+        }
+
+        // Fetch and set FieldEntity if fieldId is provided
+        if (equipmentDTO.getField() != null) {
+            Optional<FieldEntity> fieldEntityOptional = fieldDAO.findById(equipmentDTO.getField());
+            if (fieldEntityOptional.isPresent()) {
+                equipmentEntity.setField(fieldEntityOptional.get());
+            } else {
+                throw new DataPersistException("Field not found with ID: " + equipmentDTO.getField());
+            }
+        }
+
+        // Fetch and set StaffEntity if staffId is provided
+        if (equipmentDTO.getStaff() != null) {
+            Optional<StaffEntity> staffEntityOptional = staffDAO.findById(equipmentDTO.getStaff());
+            if (staffEntityOptional.isPresent()) {
+                equipmentEntity.setStaff(staffEntityOptional.get());
+            } else {
+                throw new DataPersistException("Staff not found with ID: " + equipmentDTO.getStaff());
+            }
+        }
+
         EquipmentEntity savedEntity = equipmentDAO.save(equipmentEntity);
         if (savedEntity == null) {
             throw new DataPersistException("Failed to save equipment");
