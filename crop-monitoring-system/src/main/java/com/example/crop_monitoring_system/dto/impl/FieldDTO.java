@@ -20,5 +20,6 @@ public class FieldDTO implements FieldStates {
     private List<EquipmentDTO> equipments;
     private String fieldImage1;
     private String fieldImage2;
+    /*private String log;*/
     private String log;
 }
