@@ -2,9 +2,11 @@ package com.example.crop_monitoring_system.service.impl;
 
 import com.example.crop_monitoring_system.dao.CropDAO;
 import com.example.crop_monitoring_system.dao.FieldDAO;
+import com.example.crop_monitoring_system.dao.MonitoringLOgDAO;
 import com.example.crop_monitoring_system.dto.impl.CropDTO;
 import com.example.crop_monitoring_system.entity.impl.CropEntity;
 import com.example.crop_monitoring_system.entity.impl.FieldEntity;
+import com.example.crop_monitoring_system.entity.impl.MonitoringLogEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.CropService;
 import com.example.crop_monitoring_system.utills.Mapping;
@@ -24,28 +26,55 @@ public class CropServiceImpl implements CropService {
     private Mapping mapping;
     @Autowired
     private FieldDAO fieldDAO;
+    @Autowired
+    private MonitoringLOgDAO monitoringLOgDAO;
 
     @Override
     public void saveCrop(CropDTO cropDTO) {
-        CropEntity cropEntity=mapping.toCropEntity(cropDTO);
+        CropEntity cropEntity = mapping.toCropEntity(cropDTO);
         cropEntity.setCropCode(generateCropCode());
-        System.out.println(cropEntity);
-        CropEntity savedEntity=cropDAO.save(cropEntity);
-        if (savedEntity==null){
+
+        // Fetch the MonitoringLogEntity and set it if logId is provided
+        if (cropDTO.getLogId() != null) {
+            Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(cropDTO.getLogId());
+            if (logEntityOptional.isPresent()) {
+                cropEntity.setLog(logEntityOptional.get());
+            } else {
+                throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogId());
+            }
+        }
+
+        CropEntity savedEntity = cropDAO.save(cropEntity);
+        if (savedEntity == null) {
             throw new RuntimeException("Failed to save crop");
         }
     }
 
     @Override
     public void updateCrop(String cropCode, CropDTO cropDTO) {
-        Optional<CropEntity> updatedCrop=cropDAO.findById(cropCode);
-        if (updatedCrop.isPresent()){
-            updatedCrop.get().setCropName(cropDTO.getCropName());
-            updatedCrop.get().setScientificName(cropDTO.getScientificName());
-            updatedCrop.get().setCropImage(cropDTO.getCropImage());
-            updatedCrop.get().setCategory(cropDTO.getCategory());
-            updatedCrop.get().setCropSeason(cropDTO.getCropSeason());
-            cropDAO.save(updatedCrop.get());
+        Optional<CropEntity> updatedCrop = cropDAO.findById(cropCode);
+        if (updatedCrop.isPresent()) {
+            CropEntity cropEntity = updatedCrop.get();
+
+            cropEntity.setCropName(cropDTO.getCropName());
+            cropEntity.setScientificName(cropDTO.getScientificName());
+            cropEntity.setCropImage(cropDTO.getCropImage());
+            cropEntity.setCategory(cropDTO.getCategory());
+            cropEntity.setCropSeason(cropDTO.getCropSeason());
+
+            // Fetch and set the MonitoringLogEntity if logId is provided
+            if (cropDTO.getLogId() != null) {
+                Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(cropDTO.getLogId());
+                if (logEntityOptional.isPresent()) {
+                    cropEntity.setLog(logEntityOptional.get());
+                } else {
+                    throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogId());
+                }
+            }
+
+            cropDAO.save(cropEntity);
+        } else {
+            throw new DataPersistException("Crop not found with code: " + cropCode);
         }
     }
 
