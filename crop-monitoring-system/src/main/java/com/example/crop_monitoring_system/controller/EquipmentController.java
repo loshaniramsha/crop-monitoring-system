@@ -61,8 +61,6 @@ public class EquipmentController {
     public EquipmentDTO getEquipment(@PathVariable("equipmentId") String equipmentId) {
         return equipmentService.getSelectedEquipment(equipmentId);
     }
-
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EquipmentDTO> getAllEquipment() {
         return equipmentService.getAllEquipment();
