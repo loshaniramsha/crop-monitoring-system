@@ -1,8 +1,10 @@
 package com.example.crop_monitoring_system.service.impl;
 
 import com.example.crop_monitoring_system.dao.FieldDAO;
+import com.example.crop_monitoring_system.dao.MonitoringLOgDAO;
 import com.example.crop_monitoring_system.dto.impl.FieldDTO;
 import com.example.crop_monitoring_system.entity.impl.FieldEntity;
+import com.example.crop_monitoring_system.entity.impl.MonitoringLogEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.FieldService;
 import com.example.crop_monitoring_system.utills.AppUtil;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class FieldServiceImpl implements FieldService {
@@ -19,20 +23,32 @@ public class FieldServiceImpl implements FieldService {
     private FieldDAO fieldDAO;
     @Autowired
     private Mapping mapping;
+    @Autowired
+    private MonitoringLOgDAO monitoringLOgDAO;
 
     @Override
     public void saveField(FieldDTO fieldDTO) {
-        fieldDTO.setFieldLocation(AppUtil.generateFieldlocation());
-        FieldEntity save=fieldDAO.save(mapping.toFieldEntity(fieldDTO));
-        if (save==null){
-            throw new DataPersistException("Field not saved");
+        // Check if log ID is valid and retrieve the corresponding MonitoringLogEntity
+        Optional<MonitoringLogEntity> logEntityOpt = monitoringLOgDAO.findById(fieldDTO.getLog());
+        if (logEntityOpt.isEmpty()) {
+            throw new DataPersistException("Log ID is invalid or does not exist");
+        }
+
+        // Convert FieldDTO to FieldEntity and set the log entity
+        FieldEntity fieldEntity = mapping.toFieldEntity(fieldDTO);
+        fieldEntity.setLog(logEntityOpt.get());
+
+        // Save the field entity
+        FieldEntity savedFieldEntity = fieldDAO.save(fieldEntity);
+
+        // Ensure that the entity was saved successfully
+        if (savedFieldEntity == null || savedFieldEntity.getLog() == null) {
+            throw new DataPersistException("Field not saved, logId is null");
         }
     }
 
     @Override
-    public void updateField(String fieldCode, FieldDTO fieldDTO) {
-
-    }
+    public void updateField(String fieldCode, FieldDTO fieldDTO) {}
 
     @Override
     public void deleteField(String fieldCode) {
