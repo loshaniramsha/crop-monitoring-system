@@ -75,19 +75,58 @@ public ResponseEntity<Void> saveField(
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
  }
-    @PutMapping(value = "/{fieldCode}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateField(
-            @PathVariable("fieldCode") String fieldCode,
-            @RequestBody FieldDTO fieldDTO
-    ) {
-        try {
-            fieldService.updateField(fieldCode, fieldDTO);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (DataPersistException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+ @PutMapping(value = "/{fieldCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+ public ResponseEntity<Void> updateField(
+         @PathVariable("fieldCode") String fieldCode,
+         @RequestPart("fieldName") String fieldName,
+         @RequestPart(value = "fieldLocation", required = false) String fieldLocation,
+         @RequestPart("extentSize") String extentSize,
+         @RequestPart(value = "fieldImage1", required = false) MultipartFile fieldImage1,
+         @RequestPart(value = "fieldImage2", required = false) MultipartFile fieldImage2,
+         @RequestPart("logId") String logId
+ ) {
+     try {
+         FieldDTO fieldDTO = new FieldDTO();
+         fieldDTO.setFieldCode(fieldCode);
+         fieldDTO.setFieldName(fieldName);
+         fieldDTO.setLog(logId);
+
+         // Parse and set the fieldLocation if provided
+         if (fieldLocation != null && fieldLocation.matches("\\d+,\\d+")) {
+             String[] coordinates = fieldLocation.split(",");
+             int x = Integer.parseInt(coordinates[0].trim());
+             int y = Integer.parseInt(coordinates[1].trim());
+             fieldDTO.setFieldLocation(new Point(x, y));
+         } else {
+             fieldDTO.setFieldLocation(AppUtil.generateFieldLocation());
+         }
+
+         // Parse extent size
+         fieldDTO.setExtentSize(Double.parseDouble(extentSize));
+
+         // Convert images to Base64 if provided
+         if (fieldImage1 != null && !fieldImage1.isEmpty()) {
+             byte[] image1 = fieldImage1.getBytes();
+             fieldDTO.setFieldImage1(AppUtil.convertImageToBase64(image1));
+         }
+         if (fieldImage2 != null && !fieldImage2.isEmpty()) {
+             byte[] image2 = fieldImage2.getBytes();
+             fieldDTO.setFieldImage2(AppUtil.convertImageToBase64(image2));
+         }
+
+         // Call the service to update the field
+         fieldService.updateField(fieldCode, fieldDTO);
+         return new ResponseEntity<>(HttpStatus.OK);
+
+     } catch (DataPersistException e) {
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+     } catch (IOException | NumberFormatException e) {
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+     }
+ }
+
     @DeleteMapping("/{fieldCode}")
     public ResponseEntity<Void> deleteField(@PathVariable("fieldCode") String fieldCode) {
         try {
@@ -98,8 +137,6 @@ public ResponseEntity<Void> saveField(
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 }
 
 
