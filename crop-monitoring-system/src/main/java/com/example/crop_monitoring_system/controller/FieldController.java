@@ -75,6 +75,30 @@ public ResponseEntity<Void> saveField(
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
  }
+    @PutMapping(value = "/{fieldCode}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateField(
+            @PathVariable("fieldCode") String fieldCode,
+            @RequestBody FieldDTO fieldDTO
+    ) {
+        try {
+            fieldService.updateField(fieldCode, fieldDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/{fieldCode}")
+    public ResponseEntity<Void> deleteField(@PathVariable("fieldCode") String fieldCode) {
+        try {
+            fieldService.deleteField(fieldCode);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }
 
