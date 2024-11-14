@@ -48,11 +48,39 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public void updateField(String fieldCode, FieldDTO fieldDTO) {}
+    public void updateField(String fieldCode, FieldDTO fieldDTO) {
+        // Retrieve the existing field entity by its fieldCode
+        Optional<FieldEntity> existingFieldOpt = fieldDAO.findById(fieldCode);
+        if (existingFieldOpt.isEmpty()) {
+            throw new DataPersistException("Field with the provided code does not exist");
+        }
+
+        // Convert the DTO to the entity and update the entity's details
+        FieldEntity existingField = existingFieldOpt.get();
+        FieldEntity updatedField = mapping.toFieldEntity(fieldDTO);
+
+        // Update necessary fields
+        existingField.setFieldName(updatedField.getFieldName());
+        existingField.setFieldLocation(updatedField.getFieldLocation());
+        existingField.setExtentSize(updatedField.getExtentSize());
+        existingField.setFieldImage1(updatedField.getFieldImage1());
+        existingField.setFieldImage2(updatedField.getFieldImage2());
+        // Optional: Update the log entity if needed
+        if (updatedField.getLog() != null) {
+            existingField.setLog(updatedField.getLog());
+        }
+
+        // Save the updated field entity
+        fieldDAO.save(existingField);
+    }
 
     @Override
     public void deleteField(String fieldCode) {
-
+        Optional<FieldEntity> fieldEntityOpt = fieldDAO.findById(fieldCode);
+        if (fieldEntityOpt.isEmpty()) {
+            throw new DataPersistException("Field with the provided code does not exist.");
+        }
+        fieldDAO.delete(fieldEntityOpt.get());
     }
 
     @Override
