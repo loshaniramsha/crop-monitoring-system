@@ -137,6 +137,17 @@ public ResponseEntity<Void> saveField(
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+ @GetMapping("/{fieldCode}")
+ public ResponseEntity<FieldDTO> getSelectedField(@PathVariable("fieldCode") String fieldCode) {
+     try {
+         FieldDTO fieldDTO = fieldService.getSelectedField(fieldCode);
+         return new ResponseEntity<>(fieldDTO, HttpStatus.OK);
+     } catch (DataPersistException e) {
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+     }
+ }
+
 }
 
 
