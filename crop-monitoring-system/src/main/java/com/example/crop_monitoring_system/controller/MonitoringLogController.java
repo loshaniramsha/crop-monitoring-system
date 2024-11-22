@@ -99,6 +99,16 @@ public class MonitoringLogController {
     public List<MonitoringLogDTO> getAllLogs() {
         return monitoringLogService.getAllMonitoringLogs();
     }
+    @GetMapping("/generateId")
+    public ResponseEntity<String> generateLogCode() {
+        try {
+            String logCode = monitoringLogService.generateMonitoringLogId();
+            return ResponseEntity.ok(logCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
 
