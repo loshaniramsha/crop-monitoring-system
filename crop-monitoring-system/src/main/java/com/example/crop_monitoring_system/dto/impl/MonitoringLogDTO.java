@@ -17,7 +17,7 @@ public class MonitoringLogDTO implements MonitoringLogStates {
     private String logDate;
     private String logDetails;
     private String observedImage;
-    private List<FieldDTO> fields;
-    private List<CropDTO> crops;
-    private List<StaffDTO> staffs;
+    private List<FieldDTO> fieldCode;
+    private List<CropDTO> cropCode;
+    private List<StaffDTO> staffId;
 }
