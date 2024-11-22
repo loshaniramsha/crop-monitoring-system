@@ -20,20 +20,6 @@ public class EquipmentController {
     @Autowired
     private EquipmentService equipmentService;
 
-  /*  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveEquipment(@RequestBody EquipmentDTO equipmentDTO) {
-        try {
-            equipmentService.saveEquipment(equipmentDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (DataPersistException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-*/
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> saveEquipment(@RequestBody EquipmentDTO equipmentDTO) {
       try {
@@ -47,7 +33,6 @@ public class EquipmentController {
           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
       }
   }
-
     @PutMapping(value = "/{equipmentId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateEquipment(@PathVariable String equipmentId, @RequestBody EquipmentDTO equipmentDTO) {
         try {
@@ -85,6 +70,16 @@ public class EquipmentController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EquipmentDTO> getAllEquipment() {
         return equipmentService.getAllEquipment();
+    }
+    @GetMapping("/generateId")
+    public ResponseEntity<String> generateEquipmentId() {
+        try {
+            String nextId = equipmentService.generateEquipmentId();
+            return ResponseEntity.ok(nextId); // Return the generated ID
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error generating ID");
+        }
     }
 
 }
