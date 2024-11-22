@@ -36,11 +36,13 @@ public class EquipmentServiceImpl implements EquipmentService {
 
 
     @Override
+
     public void saveEquipment(EquipmentDTO equipmentDTO) {
+/*        // Map DTO to Entity
         EquipmentEntity equipmentEntity = mapping.toEquipmentEntity(equipmentDTO);
         equipmentEntity.setEquipmentId(generateEquipmentId());
 
-        // Check and set EquipmentType
+        // Validate and Set EquipmentType
         if (equipmentDTO.getEquipmentType() != null) {
             try {
                 EquipmentType equipmentType = EquipmentType.valueOf(equipmentDTO.getEquipmentType().toUpperCase());
@@ -50,8 +52,8 @@ public class EquipmentServiceImpl implements EquipmentService {
             }
         }
 
-        // Fetch and set FieldEntity if fieldId is provided
-        if (equipmentDTO.getFieldCode() != null) {
+        // Validate and Set FieldEntity
+        if (equipmentDTO.getFieldCode() != null && !equipmentDTO.getFieldCode().isEmpty()) {
             Optional<FieldEntity> fieldEntityOptional = fieldDAO.findById(equipmentDTO.getFieldCode());
             if (fieldEntityOptional.isPresent()) {
                 equipmentEntity.setField(fieldEntityOptional.get());
@@ -60,8 +62,8 @@ public class EquipmentServiceImpl implements EquipmentService {
             }
         }
 
-        // Fetch and set StaffEntity if staffId is provided
-        if (equipmentDTO.getStaffId() != null) {
+        // Validate and Set StaffEntity
+        if (equipmentDTO.getStaffId() != null && !equipmentDTO.getStaffId().isEmpty()) {
             Optional<StaffEntity> staffEntityOptional = staffDAO.findById(equipmentDTO.getStaffId());
             if (staffEntityOptional.isPresent()) {
                 equipmentEntity.setStaff(staffEntityOptional.get());
@@ -70,12 +72,52 @@ public class EquipmentServiceImpl implements EquipmentService {
             }
         }
 
+        // Save Equipment Entity
+        EquipmentEntity savedEntity = equipmentDAO.save(equipmentEntity);
+        if (savedEntity == null) {
+            throw new DataPersistException("Failed to save equipment");
+        }*/
+        // Map DTO to Entity
+        EquipmentEntity equipmentEntity = mapping.toEquipmentEntity(equipmentDTO);
+        equipmentEntity.setEquipmentId(generateEquipmentId());
+
+        // Validate and Set EquipmentType
+        if (equipmentDTO.getEquipmentType() != null) {
+            try {
+                EquipmentType equipmentType = EquipmentType.valueOf(equipmentDTO.getEquipmentType().toUpperCase());
+                equipmentEntity.setEquipmentType(equipmentType);
+            } catch (IllegalArgumentException e) {
+                throw new DataPersistException("Invalid Equipment Type: " + equipmentDTO.getEquipmentType());
+            }
+        }
+
+        // Validate and Set FieldEntity
+        if (equipmentDTO.getFieldCode() != null && !equipmentDTO.getFieldCode().isEmpty()) {
+            Optional<FieldEntity> fieldEntityOptional = fieldDAO.findById(equipmentDTO.getFieldCode());
+            if (fieldEntityOptional.isPresent()) {
+                equipmentEntity.setField(fieldEntityOptional.get());
+            } else {
+                throw new DataPersistException("Field not found with ID: " + equipmentDTO.getFieldCode());
+            }
+        }
+
+        // Validate and Set StaffEntity
+        if (equipmentDTO.getStaffId() != null && !equipmentDTO.getStaffId().isEmpty()) {
+            Optional<StaffEntity> staffEntityOptional = staffDAO.findById(equipmentDTO.getStaffId());
+            if (staffEntityOptional.isPresent()) {
+                equipmentEntity.setStaff(staffEntityOptional.get());
+            } else {
+                throw new DataPersistException("Staff not found with ID: " + equipmentDTO.getStaffId());
+            }
+        }
+
+        // Save Equipment Entity
         EquipmentEntity savedEntity = equipmentDAO.save(equipmentEntity);
         if (savedEntity == null) {
             throw new DataPersistException("Failed to save equipment");
         }
-
     }
+
 
     @Override
     public void updateEquipment(String equipmentId, EquipmentDTO equipmentDTO) {
