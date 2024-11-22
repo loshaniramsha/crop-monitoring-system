@@ -125,7 +125,16 @@ public ResponseEntity<Void> saveCrop(
    public List<CropDTO> getAllCrop(){
         return cropService.getAllCrops();
     }
-
+    @GetMapping("/generateId")
+    public ResponseEntity<String> generateCropCode() {
+        try {
+            String cropCode = cropService.generateCropCode();
+            return new ResponseEntity<>(cropCode, HttpStatus.OK);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
 
