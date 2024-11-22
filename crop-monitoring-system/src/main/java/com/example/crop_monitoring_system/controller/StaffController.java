@@ -69,4 +69,15 @@ public class StaffController {
     public List<StaffDTO> getAllStaffs(){
         return staffService.getAllStaffs();
     }
+
+    @GetMapping("/generateId")
+    public ResponseEntity<String> generateStaffId() {
+        try {
+            String nextId = staffService.generateStaffId();
+            return ResponseEntity.ok(nextId);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
