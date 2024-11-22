@@ -37,7 +37,7 @@ public class FieldServiceImpl implements FieldService {
     @Override
     public void saveField(FieldDTO fieldDTO) {
         // Check if log ID is valid and retrieve the corresponding MonitoringLogEntity
-        Optional<MonitoringLogEntity> logEntityOpt = monitoringLOgDAO.findById(fieldDTO.getLog());
+        Optional<MonitoringLogEntity> logEntityOpt = monitoringLOgDAO.findById(fieldDTO.getLogCode());
         if (logEntityOpt.isEmpty()) {
             throw new DataPersistException("Log ID is invalid or does not exist");
         }
@@ -119,7 +119,7 @@ public class FieldServiceImpl implements FieldService {
                     return cropDTO;
                 })
                 .collect(Collectors.toList());
-        fieldDTO.setCrops(cropDTOs);
+        fieldDTO.setCropCode(cropDTOs);
 
         // Map List<StaffEntity> to List<StaffDTO>
         List<StaffDTO> staffDTOs = fieldEntity.getStaffs().stream()
@@ -131,7 +131,7 @@ public class FieldServiceImpl implements FieldService {
                     return staffDTO;
                 })
                 .collect(Collectors.toList());
-        fieldDTO.setStaffs(staffDTOs);
+        fieldDTO.setStaffId(staffDTOs);
 
         // Map List<EquipmentEntity> to List<EquipmentDTO>
         List<EquipmentDTO> equipmentDTOs = fieldEntity.getEquipments().stream()
@@ -143,11 +143,11 @@ public class FieldServiceImpl implements FieldService {
                     return equipmentDTO;
                 })
                 .collect(Collectors.toList());
-        fieldDTO.setEquipments(equipmentDTOs);
+        fieldDTO.setEquipmentId(equipmentDTOs);
 
         // Check if log is not null before setting it
         if (fieldEntity.getLog() != null) {
-            fieldDTO.setLog(fieldEntity.getLog().getLogCode()); // or getLogDetails() as needed
+            fieldDTO.setLogCode(fieldEntity.getLog().getLogCode()); // or getLogDetails() as needed
         }
 
         return fieldDTO;
@@ -155,8 +155,10 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public List<FieldDTO> getAllFields() {
-        return List.of();
+       List<FieldEntity> fieldEntities = fieldDAO.findAll();
+       return mapping.toFieldDTOList(fieldEntities);
     }
+
 
     @Override
     public String generateFieldCode() {

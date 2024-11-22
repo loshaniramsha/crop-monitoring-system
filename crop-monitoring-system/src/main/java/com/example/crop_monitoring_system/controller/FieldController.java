@@ -15,11 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static java.rmi.server.LogStream.log;
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @RestController
 @RequestMapping("api/v1/field")
@@ -49,7 +45,7 @@ public ResponseEntity<Void> saveField(
         FieldDTO fieldDTO = new FieldDTO();
         fieldDTO.setFieldCode(fieldCode);
         fieldDTO.setFieldName(fieldName);
-        fieldDTO.setLog(logId);
+        fieldDTO.setLogCode(logId);
 
         // Check if fieldLocation is in "x,y" format or if it should be generated
         if (fieldLocation != null && fieldLocation.matches("\\d+,\\d+")) {
@@ -90,12 +86,12 @@ public ResponseEntity<Void> saveField(
          @RequestPart(value = "fieldImage1", required = false) MultipartFile fieldImage1,
          @RequestPart(value = "fieldImage2", required = false) MultipartFile fieldImage2,
          @RequestPart("logId") String logId
- ) {
+  ) {
      try {
          FieldDTO fieldDTO = new FieldDTO();
          fieldDTO.setFieldCode(fieldCode);
          fieldDTO.setFieldName(fieldName);
-         fieldDTO.setLog(logId);
+         fieldDTO.setLogCode(logId);
 
          // Parse and set the fieldLocation if provided
          if (fieldLocation != null && fieldLocation.matches("\\d+,\\d+")) {
@@ -133,8 +129,8 @@ public ResponseEntity<Void> saveField(
      }
  }
 
-    @DeleteMapping("/{fieldCode}")
-    public ResponseEntity<Void> deleteField(@PathVariable("fieldCode") String fieldCode) {
+ @DeleteMapping("/{fieldCode}")
+ public ResponseEntity<Void> deleteField(@PathVariable("fieldCode") String fieldCode) {
         try {
             fieldService.deleteField(fieldCode);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -143,7 +139,6 @@ public ResponseEntity<Void> saveField(
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
  @GetMapping("/{fieldCode}")
  public ResponseEntity<FieldDTO> getSelectedField(@PathVariable("fieldCode") String fieldCode) {
      try {
@@ -154,8 +149,10 @@ public ResponseEntity<Void> saveField(
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
      }
  }
-
-
+ @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+public List<FieldDTO> getAllField(){
+    return fieldService.getAllFields();
+}
 }
 
 
