@@ -34,6 +34,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Autowired
     private StaffDAO staffDAO;
 
+
     @Override
     public void saveEquipment(EquipmentDTO equipmentDTO) {
         EquipmentEntity equipmentEntity = mapping.toEquipmentEntity(equipmentDTO);
@@ -50,22 +51,22 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
 
         // Fetch and set FieldEntity if fieldId is provided
-        if (equipmentDTO.getField() != null) {
-            Optional<FieldEntity> fieldEntityOptional = fieldDAO.findById(equipmentDTO.getField());
+        if (equipmentDTO.getFieldCode() != null) {
+            Optional<FieldEntity> fieldEntityOptional = fieldDAO.findById(equipmentDTO.getFieldCode());
             if (fieldEntityOptional.isPresent()) {
                 equipmentEntity.setField(fieldEntityOptional.get());
             } else {
-                throw new DataPersistException("Field not found with ID: " + equipmentDTO.getField());
+                throw new DataPersistException("Field not found with ID: " + equipmentDTO.getFieldCode());
             }
         }
 
         // Fetch and set StaffEntity if staffId is provided
-        if (equipmentDTO.getStaff() != null) {
-            Optional<StaffEntity> staffEntityOptional = staffDAO.findById(equipmentDTO.getStaff());
+        if (equipmentDTO.getStaffId() != null) {
+            Optional<StaffEntity> staffEntityOptional = staffDAO.findById(equipmentDTO.getStaffId());
             if (staffEntityOptional.isPresent()) {
                 equipmentEntity.setStaff(staffEntityOptional.get());
             } else {
-                throw new DataPersistException("Staff not found with ID: " + equipmentDTO.getStaff());
+                throw new DataPersistException("Staff not found with ID: " + equipmentDTO.getStaffId());
             }
         }
 
@@ -107,22 +108,22 @@ public class EquipmentServiceImpl implements EquipmentService {
             }
 
             // Fetch and set the FieldEntity if fieldId is provided
-            if (equipmentDTO.getField() != null) {
-                Optional<FieldEntity> fieldEntityOptional = fieldDAO.findById(equipmentDTO.getField());
+            if (equipmentDTO.getFieldCode() != null) {
+                Optional<FieldEntity> fieldEntityOptional = fieldDAO.findById(equipmentDTO.getFieldCode());
                 if (fieldEntityOptional.isPresent()) {
                     existingEntity.setField(fieldEntityOptional.get());
                 } else {
-                    throw new DataPersistException("Field not found with ID: " + equipmentDTO.getField());
+                    throw new DataPersistException("Field not found with ID: " + equipmentDTO.getFieldCode());
                 }
             }
 
             // Fetch and set the StaffEntity if staffId is provided
-            if (equipmentDTO.getStaff() != null) {
-                Optional<StaffEntity> staffEntityOptional = staffDAO.findById(equipmentDTO.getStaff());
+            if (equipmentDTO.getStaffId() != null) {
+                Optional<StaffEntity> staffEntityOptional = staffDAO.findById(equipmentDTO.getStaffId());
                 if (staffEntityOptional.isPresent()) {
                     existingEntity.setStaff(staffEntityOptional.get());
                 } else {
-                    throw new DataPersistException("Staff not found with ID: " + equipmentDTO.getStaff());
+                    throw new DataPersistException("Staff not found with ID: " + equipmentDTO.getStaffId());
                 }
             }
 
@@ -160,7 +161,8 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public List<EquipmentDTO> getAllEquipment() {
-       return mapping.toEquipmentDTOList(equipmentDAO.findAll());
+        List<EquipmentEntity> equipmentEntities = equipmentDAO.findAll();
+        return mapping.toEquipmentDTOList(equipmentEntities);
     }
 
     @Override
