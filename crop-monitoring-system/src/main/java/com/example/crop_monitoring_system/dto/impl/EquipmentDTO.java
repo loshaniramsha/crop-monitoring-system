@@ -17,7 +17,7 @@ public class EquipmentDTO implements EquipmentStates {
     private String equipmentName;
     private String equipmentType;
     private States state;
-    private String field;
-    private String staff;
+    private String fieldCode;
+    private String staffId;
 
 }
