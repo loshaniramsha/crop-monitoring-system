@@ -7,17 +7,23 @@ import com.example.crop_monitoring_system.utills.AppUtil;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.rmi.server.LogStream.log;
+import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @RestController
 @RequestMapping("api/v1/field")
+@CrossOrigin
 public class FieldController {
     @Autowired
     private FieldService fieldService;
@@ -137,6 +143,7 @@ public ResponseEntity<Void> saveField(
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
  @GetMapping("/{fieldCode}")
  public ResponseEntity<FieldDTO> getSelectedField(@PathVariable("fieldCode") String fieldCode) {
      try {
@@ -147,6 +154,7 @@ public ResponseEntity<Void> saveField(
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
      }
  }
+
 
 }
 

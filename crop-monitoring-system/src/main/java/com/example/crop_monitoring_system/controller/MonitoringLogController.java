@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/monitoringlog")
+@CrossOrigin
 public class MonitoringLogController {
     @Autowired
     private MonitoringLogService monitoringLogService;

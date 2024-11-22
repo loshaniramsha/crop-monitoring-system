@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/equipment")
+@CrossOrigin
 public class EquipmentController {
     @Autowired
     private EquipmentService equipmentService;
@@ -59,7 +60,12 @@ public class EquipmentController {
     }
     @GetMapping(value = "/{equipmentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public EquipmentDTO getEquipment(@PathVariable("equipmentId") String equipmentId) {
-        return equipmentService.getSelectedEquipment(equipmentId);
+        try {
+            return equipmentService.getSelectedEquipment(equipmentId);
+        } catch (NotFoundException e) {
+            return null;
+        }
+
     }
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<EquipmentDTO> getAllEquipment() {
