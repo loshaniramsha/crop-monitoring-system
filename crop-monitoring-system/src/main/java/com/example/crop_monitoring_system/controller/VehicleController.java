@@ -89,13 +89,12 @@ public ResponseEntity<Void> updateVehicle(
 
     @GetMapping("/generateId")
     public ResponseEntity<String> generateVehicleId() {
-        try {
-            String nextId = vehicleService.generateVehicleCode();
-            return ResponseEntity.ok(nextId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    try {
+        String nextId = vehicleService.generateVehicleCode();
+        return ResponseEntity.ok(nextId);  // Returns plain string
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+}
 }
