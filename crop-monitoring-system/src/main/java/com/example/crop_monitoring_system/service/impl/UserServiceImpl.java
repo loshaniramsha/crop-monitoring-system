@@ -11,6 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserDTO userDTO) {
         UserEntity save=userDAO.save(mapping.toUserEntity(userDTO));
         if (save==null){
+            log.error("User not saved");
             throw new DataPersistException("User not saved");
         }
 
@@ -42,6 +45,7 @@ public class UserServiceImpl implements UserService {
             userDAO.save(mapping.toUserEntity(userDTO));
         }
         else {
+            log.error("User not found");
             throw new NotFoundException("User"+userId+"not found");
         }
     }
@@ -52,6 +56,7 @@ public class UserServiceImpl implements UserService {
             userDAO.deleteById(userId);
         }
         else {
+            log.error("User not found");
             throw new DataPersistException("User"+userId+"not found");
         }
     }
@@ -63,6 +68,7 @@ public class UserServiceImpl implements UserService {
             return mapping.toUserDTO(searched.get());
         }
         else {
+            log.error("User not found");
             throw new DataPersistException("User"+userId+"not found");
         }
     }
@@ -71,5 +77,4 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsers() {
         return mapping.toUserDTOList(userDAO.findAll());
     }
-
 }
