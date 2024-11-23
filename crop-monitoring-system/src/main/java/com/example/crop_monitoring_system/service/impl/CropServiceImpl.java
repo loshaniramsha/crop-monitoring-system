@@ -11,6 +11,7 @@ import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.CropService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class CropServiceImpl implements CropService {
     @Autowired
     private CropDAO cropDAO;
@@ -40,12 +42,14 @@ public class CropServiceImpl implements CropService {
             if (logEntityOptional.isPresent()) {
                 cropEntity.setLog(logEntityOptional.get());
             } else {
+                log.error("Monitoring Log not found with ID: {}", cropDTO.getLogId());
                 throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogId());
             }
         }
 
         CropEntity savedEntity = cropDAO.save(cropEntity);
         if (savedEntity == null) {
+            log.error("Failed to save crop");
             throw new RuntimeException("Failed to save crop");
         }
     }
@@ -68,12 +72,14 @@ public class CropServiceImpl implements CropService {
                 if (logEntityOptional.isPresent()) {
                     cropEntity.setLog(logEntityOptional.get());
                 } else {
+                    log.error("Monitoring Log not found with ID: {}", cropDTO.getLogId());
                     throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogId());
                 }
             }
 
             cropDAO.save(cropEntity);
         } else {
+            log.error("Crop not found with code: {}", cropCode);
             throw new DataPersistException("Crop not found with code: " + cropCode);
         }
     }
@@ -84,6 +90,7 @@ public class CropServiceImpl implements CropService {
             cropDAO.deleteById(cropCode);
         }
         else {
+            log.error("Crop not found with code: {}", cropCode);
             throw new DataPersistException("Crop not found");
         }
     }
@@ -95,6 +102,7 @@ public class CropServiceImpl implements CropService {
             return mapping.toCropDTO(searchedCrop.get());
         }
         else {
+            log.error("Crop not found with code: {}", cropCode);
             throw new DataPersistException("Crop not found");
         }
     }
