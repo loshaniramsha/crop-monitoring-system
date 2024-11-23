@@ -20,10 +20,11 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/crops")
 @CrossOrigin
-public class CropController {
+public class CropController{
 
     @Autowired
     private CropService cropService;
+
 @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 public ResponseEntity<Void> saveCrop(
         @RequestPart("cropName") String cropName,
