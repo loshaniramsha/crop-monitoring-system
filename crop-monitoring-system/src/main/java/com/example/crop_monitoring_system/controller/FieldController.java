@@ -150,9 +150,10 @@ public ResponseEntity<Void> saveField(
      }
  }
  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public List<FieldDTO> getAllField(){
+    public List<FieldDTO> getAllFields(){
     return fieldService.getAllFields();
-}
+ }
+
 }
 
 

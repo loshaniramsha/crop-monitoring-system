@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -119,7 +120,7 @@ public class FieldServiceImpl implements FieldService {
                     return cropDTO;
                 })
                 .collect(Collectors.toList());
-        fieldDTO.setCropCode(cropDTOs);
+        fieldDTO.setCrops(cropDTOs);
 
         // Map List<StaffEntity> to List<StaffDTO>
         List<StaffDTO> staffDTOs = fieldEntity.getStaffs().stream()
@@ -131,7 +132,7 @@ public class FieldServiceImpl implements FieldService {
                     return staffDTO;
                 })
                 .collect(Collectors.toList());
-        fieldDTO.setStaffId(staffDTOs);
+        fieldDTO.setStaffs(staffDTOs);
 
         // Map List<EquipmentEntity> to List<EquipmentDTO>
         List<EquipmentDTO> equipmentDTOs = fieldEntity.getEquipments().stream()
@@ -143,7 +144,7 @@ public class FieldServiceImpl implements FieldService {
                     return equipmentDTO;
                 })
                 .collect(Collectors.toList());
-        fieldDTO.setEquipmentId(equipmentDTOs);
+        fieldDTO.setEquipments(equipmentDTOs);
 
         // Check if log is not null before setting it
         if (fieldEntity.getLog() != null) {
@@ -155,8 +156,10 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public List<FieldDTO> getAllFields() {
-       List<FieldEntity> fieldEntities = fieldDAO.findAll();
-       return mapping.toFieldDTOList(fieldEntities);
+
+        List<FieldEntity> fieldEntities=fieldDAO.findAll();
+        return mapping.toFieldDTOList(fieldEntities);
+
     }
 
 
