@@ -7,6 +7,7 @@ import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.MonitoringLogService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class MonitoringLogServiceImpl implements MonitoringLogService {
     @Autowired
     private MonitoringLOgDAO monitoringLOgDAO;
@@ -24,6 +26,7 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
     public void saveMonitoringLog(MonitoringLogDTO monitoringLogDTO) {
         MonitoringLogEntity save=monitoringLOgDAO.save(mapping.toMonitoringLogEntity(monitoringLogDTO));
         if (save==null){
+            log.error("Monitoring Log not saved");
             throw new DataPersistException("Monitoring Log not saved");
         }
     }
@@ -44,6 +47,7 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
             monitoringLOgDAO.deleteById(logId);
         }
         else {
+            log.error("Monitoring Log not found");
             throw  new DataPersistException("Monitoring Log not found");
         }
     }
@@ -52,9 +56,11 @@ public class MonitoringLogServiceImpl implements MonitoringLogService {
     public MonitoringLogDTO getSelectedMonitoringLog(String logId) {
         Optional<MonitoringLogEntity> searched=monitoringLOgDAO.findById(logId);
         if (searched.isPresent()){
+            log.info("Monitoring Log found");
             return mapping.toMonitoringLogDTO(searched.get());
         }
         else {
+            log.error("Monitoring Log not found");
             throw new DataPersistException("Monitoring Log not found");
         }
     }
