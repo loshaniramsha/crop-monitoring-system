@@ -13,12 +13,12 @@ import com.example.crop_monitoring_system.service.FieldService;
 import com.example.crop_monitoring_system.utills.AppUtil;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class FieldServiceImpl implements FieldService {
     @Autowired
     private FieldDAO fieldDAO;
@@ -40,6 +41,7 @@ public class FieldServiceImpl implements FieldService {
         // Check if log ID is valid and retrieve the corresponding MonitoringLogEntity
         Optional<MonitoringLogEntity> logEntityOpt = monitoringLOgDAO.findById(fieldDTO.getLogCode());
         if (logEntityOpt.isEmpty()) {
+            log.error("Log ID is invalid or does not exist");
             throw new DataPersistException("Log ID is invalid or does not exist");
         }
 
@@ -52,6 +54,7 @@ public class FieldServiceImpl implements FieldService {
 
         // Ensure that the entity was saved successfully
         if (savedFieldEntity == null || savedFieldEntity.getLog() == null) {
+            log.error("Field not saved, logId is null");
             throw new DataPersistException("Field not saved, logId is null");
         }
     }
@@ -61,6 +64,7 @@ public class FieldServiceImpl implements FieldService {
         // Retrieve the existing field entity by its fieldCode
         Optional<FieldEntity> existingFieldOpt = fieldDAO.findById(fieldCode);
         if (existingFieldOpt.isEmpty()) {
+            log.error("Field with the provided code does not exist");
             throw new DataPersistException("Field with the provided code does not exist");
         }
 
@@ -87,6 +91,7 @@ public class FieldServiceImpl implements FieldService {
     public void deleteField(String fieldCode) {
         Optional<FieldEntity> fieldEntityOpt = fieldDAO.findById(fieldCode);
         if (fieldEntityOpt.isEmpty()) {
+            log.error("Field with the provided code does not exist.");
             throw new DataPersistException("Field with the provided code does not exist.");
         }
         fieldDAO.delete(fieldEntityOpt.get());
@@ -96,6 +101,7 @@ public class FieldServiceImpl implements FieldService {
     public FieldDTO getSelectedField(String fieldCode) {
         Optional<FieldEntity> fieldEntityOpt = fieldDAO.findById(fieldCode);
         if (fieldEntityOpt.isEmpty()) {
+            log.error("Field with the provided code does not exist.");
             throw new DataPersistException("Field with the provided code does not exist.");
         }
 
@@ -156,12 +162,9 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public List<FieldDTO> getAllFields() {
-
         List<FieldEntity> fieldEntities=fieldDAO.findAll();
         return mapping.toFieldDTOList(fieldEntities);
-
     }
-
 
     @Override
     public String generateFieldCode() {
