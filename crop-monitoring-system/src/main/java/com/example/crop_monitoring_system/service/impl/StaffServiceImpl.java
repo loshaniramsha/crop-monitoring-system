@@ -9,6 +9,7 @@ import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.StaffService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class StaffServiceImpl implements StaffService {
     @Autowired
     private StaffDAO staffDAO;
@@ -35,6 +37,7 @@ public class StaffServiceImpl implements StaffService {
             if (logEntityOptional.isPresent()) {
                 staffEntity.setLog(logEntityOptional.get());
             } else {
+                log.error("Monitoring Log not found with ID: " + staffDTO.getLogId());
                 throw new DataPersistException("Monitoring Log not found with ID: " + staffDTO.getLogId());
             }
         }
@@ -65,6 +68,7 @@ public class StaffServiceImpl implements StaffService {
             staffEntity.setEmail(staffDTO.getEmail());
             staffDAO.save(staffEntity);
         } else {
+            log.error("Staff not found with ID: " + staffId);
             throw new DataPersistException("Staff not found");
         }
     }
@@ -75,6 +79,7 @@ public class StaffServiceImpl implements StaffService {
             staffDAO.deleteById(staffId);
         }
         else {
+            log.error("Staff not found with ID: " + staffId);
             throw new DataPersistException("Staff not found");
         }
     }
@@ -85,6 +90,7 @@ public class StaffServiceImpl implements StaffService {
         if (searched.isPresent()) {
             return mapping.toStaffDTO(searched.get());
         } else {
+            log.error("Staff not found with ID: " + staffId);
             throw new DataPersistException("Staff not found");
         }
     }
