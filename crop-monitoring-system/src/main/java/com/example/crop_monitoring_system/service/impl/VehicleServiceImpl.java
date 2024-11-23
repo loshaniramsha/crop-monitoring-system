@@ -7,6 +7,7 @@ import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.VehicleService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private VehicleDAO vehicleDAO;
@@ -25,9 +27,9 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleDTO.setVehicleCode(generateVehicleCode());
         VehicleEntity save=vehicleDAO.save(mapping.toVehicleEntity(vehicleDTO));
         if (save==null){
+            log.error("Vehicle not saved");
             throw new DataPersistException("Vehicle not saved");
         }
-
     }
 
     @Override
@@ -35,9 +37,9 @@ public class VehicleServiceImpl implements VehicleService {
         Optional<VehicleEntity> selectVehicle=vehicleDAO.findById(vehicleCode);
         if (selectVehicle.isPresent()){
             vehicleDAO.save(mapping.toVehicleEntity(vehicleDTO));
-
         }
         else {
+            log.error("Vehicle not found");
             new DataPersistException("Vehicle not found");
         }
     }
@@ -48,6 +50,7 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleDAO.deleteById(vehicleCode);
         }
         else {
+            log.error("Vehicle not found");
             throw new DataPersistException("Vehicle not found");
         }
     }
@@ -59,6 +62,7 @@ public class VehicleServiceImpl implements VehicleService {
             return mapping.toVehicleDTO(searched.get());
         }
         else {
+            log.error("Vehicle not found");
             throw new DataPersistException("Vehicle not found");
         }
     }
