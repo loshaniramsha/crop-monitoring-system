@@ -13,6 +13,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,5 +77,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUsers() {
         return mapping.toUserDTOList(userDAO.findAll());
+    }
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return userName ->
+                userDAO.findByEmail(userName)
+                        .orElseThrow(()-> new NotFoundException("User Not Found"));
     }
 }

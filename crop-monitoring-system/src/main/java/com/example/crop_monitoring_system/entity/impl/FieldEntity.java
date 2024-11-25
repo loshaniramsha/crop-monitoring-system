@@ -27,7 +27,7 @@ public class FieldEntity implements SuperEntity {
 
     private Double extentSize;
 
-    @OneToMany(mappedBy = "field", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CropEntity> crops;
 
     @ManyToMany(mappedBy = "fields")

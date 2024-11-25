@@ -54,7 +54,7 @@ public class StaffEntity implements SuperEntity {
     private List<FieldEntity> fields;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleEntity> vehicles;
 
     @JsonIgnore

@@ -151,8 +151,7 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public List<FieldDTO> getAllFields() {
-        List<FieldEntity> fieldEntities=fieldDAO.findAll();
-        return mapping.toFieldDTOList(fieldEntities);
+        return fieldDAO.findAll().stream().map(mapping::toFieldDTO).collect(Collectors.toList());
     }
 
     @Override

@@ -4,11 +4,8 @@ import com.example.crop_monitoring_system.dto.impl.FieldDTO;
 import com.example.crop_monitoring_system.exception.DataPersistException;
 import com.example.crop_monitoring_system.service.FieldService;
 import com.example.crop_monitoring_system.utills.AppUtil;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -149,7 +146,7 @@ public ResponseEntity<Void> saveField(
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
      }
  }
- @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+ @GetMapping
     public List<FieldDTO> getAllFields(){
     return fieldService.getAllFields();
  }
