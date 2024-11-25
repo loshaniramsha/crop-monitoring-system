@@ -3,6 +3,7 @@ package com.example.crop_monitoring_system.entity.impl;
 import com.example.crop_monitoring_system.entity.Gender;
 import com.example.crop_monitoring_system.entity.Role;
 import com.example.crop_monitoring_system.entity.SuperEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,6 +44,7 @@ public class StaffEntity implements SuperEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "staff_field",
@@ -51,14 +53,26 @@ public class StaffEntity implements SuperEntity {
     )
     private List<FieldEntity> fields;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VehicleEntity> vehicles;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<EquipmentEntity> equipments;
 
     @ManyToOne
     @JoinColumn(name = "logId")
     private MonitoringLogEntity log;
+
+    public void addField(FieldEntity field) {
+        fields.add(field);
+        field.getStaffs().add(this);
+    }
+
+    public void removeField(FieldEntity field) {
+        fields.remove(field);
+        field.getStaffs().remove(this);
+    }
 
 }

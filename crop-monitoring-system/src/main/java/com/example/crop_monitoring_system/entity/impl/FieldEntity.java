@@ -2,6 +2,7 @@ package com.example.crop_monitoring_system.entity.impl;
 
 
 import com.example.crop_monitoring_system.entity.SuperEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class FieldEntity implements SuperEntity {
     @ManyToMany(mappedBy = "fields")
     private List<StaffEntity> staffs;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "field",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<EquipmentEntity> equipments;
 

@@ -49,7 +49,7 @@ public ResponseEntity<Void> saveCrop(
         cropDTO.setCategory(category);
         cropDTO.setCropSeason(season);
         cropDTO.setFieldCode(fieldCode);
-        cropDTO.setLogId(logId);
+        cropDTO.setLogCode(logId);
 
         cropService.saveCrop(cropDTO);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -86,7 +86,7 @@ public ResponseEntity<Void> saveCrop(
             cropDTO.setCategory(category);
             cropDTO.setCropSeason(cropSeason);
             cropDTO.setFieldCode(fieldCode);
-            cropDTO.setLogId(logId);
+            cropDTO.setLogCode(logId);
 
             // Update crop
             cropService.updateCrop(cropCode, cropDTO);

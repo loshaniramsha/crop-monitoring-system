@@ -1,11 +1,14 @@
 package com.example.crop_monitoring_system.service.impl;
 
+import com.example.crop_monitoring_system.dao.FieldDAO;
 import com.example.crop_monitoring_system.dao.MonitoringLOgDAO;
 import com.example.crop_monitoring_system.dao.StaffDAO;
 import com.example.crop_monitoring_system.dto.impl.StaffDTO;
+import com.example.crop_monitoring_system.entity.impl.FieldEntity;
 import com.example.crop_monitoring_system.entity.impl.MonitoringLogEntity;
 import com.example.crop_monitoring_system.entity.impl.StaffEntity;
 import com.example.crop_monitoring_system.exception.DataPersistException;
+import com.example.crop_monitoring_system.exception.NotFoundException;
 import com.example.crop_monitoring_system.service.StaffService;
 import com.example.crop_monitoring_system.utills.Mapping;
 import jakarta.transaction.Transactional;
@@ -25,6 +28,8 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private MonitoringLOgDAO monitoringLOgDAO;
     @Autowired
+    private FieldDAO fieldDAO;
+    @Autowired
     private Mapping mapping;
     @Override
     public void saveStaff(StaffDTO staffDTO) {    staffDTO.setStaffId(generateStaffId());
@@ -32,13 +37,13 @@ public class StaffServiceImpl implements StaffService {
         StaffEntity staffEntity = mapping.toStaffEntity(staffDTO);
 
         // Set the log entity if logId is provided
-        if (staffDTO.getLogId() != null) {
-            Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(staffDTO.getLogId());
+        if (staffDTO.getLogCode() != null) {
+            Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(staffDTO.getLogCode());
             if (logEntityOptional.isPresent()) {
                 staffEntity.setLog(logEntityOptional.get());
             } else {
-                log.error("Monitoring Log not found with ID: " + staffDTO.getLogId());
-                throw new DataPersistException("Monitoring Log not found with ID: " + staffDTO.getLogId());
+                log.error("Monitoring Log not found with ID: " + staffDTO.getLogCode());
+                throw new DataPersistException("Monitoring Log not found with ID: " + staffDTO.getLogCode());
             }
         }
 
@@ -109,4 +114,19 @@ public class StaffServiceImpl implements StaffService {
       int newStaffId=Integer.parseInt(staffId.replace("ST",""))+1;
       return String.format("ST%03d",newStaffId);
     }
+
+    public void addFieldToStaff(String staffId, String fieldId) {
+        StaffEntity staffOptional = staffDAO.findById(staffId).orElseThrow(() -> new NotFoundException("Staff not found with ID: " + staffId));
+        FieldEntity fieldOptional = fieldDAO.findById(fieldId).orElseThrow(() -> new NotFoundException("Field not found with ID: " + fieldId));
+        staffOptional.addField(fieldOptional);
+        staffDAO.save(staffOptional);
+    }
+
+    public void removeFieldFromStaff(String staffId, String fieldId) {
+        StaffEntity staffOptional = staffDAO.findById(staffId).orElseThrow(() -> new NotFoundException("Staff not found with ID: " + staffId));
+        FieldEntity fieldOptional = fieldDAO.findById(fieldId).orElseThrow(() -> new NotFoundException("Field not found with ID: " + fieldId));
+        staffOptional.removeField(fieldOptional);
+        staffDAO.save(staffOptional);
+    }
+
 }

@@ -30,7 +30,7 @@ public class CropEntity implements SuperEntity {
     @JoinColumn(name = "field_id")
     private FieldEntity field;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "logId")
     private MonitoringLogEntity log;
 }

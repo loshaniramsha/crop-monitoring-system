@@ -128,17 +128,6 @@ public class FieldServiceImpl implements FieldService {
                 .collect(Collectors.toList());
         fieldDTO.setCrops(cropDTOs);
 
-        // Map List<StaffEntity> to List<StaffDTO>
-        List<StaffDTO> staffDTOs = fieldEntity.getStaffs().stream()
-                .map(staffEntity -> {
-                    StaffDTO staffDTO = new StaffDTO();
-                    staffDTO.setStaffId(staffEntity.getStaffId());
-                    staffDTO.setFirstName(staffEntity.getStaffId());
-                    // Set other fields as needed
-                    return staffDTO;
-                })
-                .collect(Collectors.toList());
-        fieldDTO.setStaffs(staffDTOs);
 
         // Map List<EquipmentEntity> to List<EquipmentDTO>
         List<EquipmentDTO> equipmentDTOs = fieldEntity.getEquipments().stream()

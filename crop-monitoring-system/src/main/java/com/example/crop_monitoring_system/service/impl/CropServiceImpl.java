@@ -37,13 +37,13 @@ public class CropServiceImpl implements CropService {
         cropEntity.setCropCode(generateCropCode());
 
         // Fetch the MonitoringLogEntity and set it if logId is provided
-        if (cropDTO.getLogId() != null) {
-            Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(cropDTO.getLogId());
+        if (cropDTO.getLogCode() != null) {
+            Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(cropDTO.getLogCode());
             if (logEntityOptional.isPresent()) {
                 cropEntity.setLog(logEntityOptional.get());
             } else {
-                log.error("Monitoring Log not found with ID: {}", cropDTO.getLogId());
-                throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogId());
+                log.error("Monitoring Log not found with ID: {}", cropDTO.getLogCode());
+                throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogCode());
             }
         }
 
@@ -67,13 +67,13 @@ public class CropServiceImpl implements CropService {
             cropEntity.setCropSeason(cropDTO.getCropSeason());
 
             // Fetch and set the MonitoringLogEntity if logId is provided
-            if (cropDTO.getLogId() != null) {
-                Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(cropDTO.getLogId());
+            if (cropDTO.getLogCode() != null) {
+                Optional<MonitoringLogEntity> logEntityOptional = monitoringLOgDAO.findById(cropDTO.getLogCode());
                 if (logEntityOptional.isPresent()) {
                     cropEntity.setLog(logEntityOptional.get());
                 } else {
-                    log.error("Monitoring Log not found with ID: {}", cropDTO.getLogId());
-                    throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogId());
+                    log.error("Monitoring Log not found with ID: {}", cropDTO.getLogCode());
+                    throw new DataPersistException("Monitoring Log not found with ID: " + cropDTO.getLogCode());
                 }
             }
 
