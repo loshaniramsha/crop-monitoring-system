@@ -15,9 +15,8 @@ public class FieldDTO implements FieldStates {
     private String fieldName;
     private Point fieldLocation;
     private Double extentSize;
-    private List<CropDTO> cropCode;
-    private List<StaffDTO> staffId;
-    private List<EquipmentDTO> equipmentId;
+    private List<CropDTO> crops;
+    private List<EquipmentDTO> equipments;
     private String fieldImage1;
     private String fieldImage2;
     private String logCode;

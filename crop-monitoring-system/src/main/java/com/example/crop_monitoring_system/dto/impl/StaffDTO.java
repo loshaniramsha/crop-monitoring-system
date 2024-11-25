@@ -41,5 +41,5 @@ public class StaffDTO implements StaffStates {
     private List<EquipmentDTO> equipment;
 
     //private MonitoringLogDTO log;
-    private String logId;
+    private String logCode;
 }
