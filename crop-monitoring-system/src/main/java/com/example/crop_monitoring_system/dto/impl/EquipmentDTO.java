@@ -13,11 +13,21 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class EquipmentDTO implements EquipmentStates {
-    private String equipmentId;
+   /* private String equipmentId;
     private String equipmentName;
     private String equipmentType;
     private States state;
     private String fieldCode;
-    private String staffId;
+    private String staffId;*/
+       private String equipmentId;
+       private String equipmentName;
+       private String equipmentType;
+       private String state;
+       private String fieldCode;
+       private String staffId;
+
+       // Getters and Setters
+
+
 
 }

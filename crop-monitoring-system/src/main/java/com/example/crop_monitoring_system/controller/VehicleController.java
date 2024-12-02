@@ -24,10 +24,15 @@ public class VehicleController {
 @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 public ResponseEntity<Void> saveVehicle(@RequestBody VehicleDTO vehicleDTO) {
     try {
+
+        if (vehicleDTO.getStaffId() != null) {
+            vehicleDTO.setState(States.NOT_AVAILABLE.toUpperCase());
+        }
         // Check if the state is not null and is a valid enum value
         if (vehicleDTO.getState() != null) {
             States state = States.valueOf(vehicleDTO.getState().toUpperCase()); // Convert String to enum
             if (state == States.AVAILABLE || state == States.NOT_AVAILABLE) {
+                System.out.println("staff id: " + vehicleDTO.getStaffId());
                 vehicleService.saveVehicle(vehicleDTO);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
@@ -44,23 +49,27 @@ public ResponseEntity<Void> saveVehicle(@RequestBody VehicleDTO vehicleDTO) {
 }
 
 
-@PutMapping(value = "/{vehicleCode}", consumes = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<Void> updateVehicle(
-        @PathVariable("vehicleCode") String vehicleCode,
-        @RequestBody VehicleDTO vehicleDTO
-) {
-    try {
-        vehicleDTO.setVehicleCode(vehicleCode);
-        vehicleService.updateVehicle(vehicleCode, vehicleDTO);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    } catch (NotFoundException e) {
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } catch (DataPersistException e) {
-        e.printStackTrace();
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    @PutMapping(value = "/{vehicleCode}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateVehicle(
+            @PathVariable("vehicleCode") String vehicleCode,
+            @RequestBody VehicleDTO vehicleDTO
+    ) {
+        try {
+
+            if (vehicleDTO.getStaffId() != null) {
+                vehicleDTO.setState(States.NOT_AVAILABLE.toUpperCase());
+            }
+            vehicleDTO.setVehicleCode(vehicleCode);
+            vehicleService.updateVehicle(vehicleCode, vehicleDTO);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
 
     @DeleteMapping("/{vehicleCode}")
