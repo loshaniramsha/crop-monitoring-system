@@ -11,4 +11,7 @@ public interface StaffService {
     StaffDTO getSelectedStaff(String staffId);
     List<StaffDTO> getAllStaffs();
     String generateStaffId();
+
+    void addFieldToStaff(String staffId, String fieldId);
+    void removeFieldFromStaff(String staffId, String fieldId);
 }

@@ -24,7 +24,6 @@ public class VehicleController {
 @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 public ResponseEntity<Void> saveVehicle(@RequestBody VehicleDTO vehicleDTO) {
     try {
-
         if (vehicleDTO.getStaffId() != null) {
             vehicleDTO.setState(States.NOT_AVAILABLE.toUpperCase());
         }

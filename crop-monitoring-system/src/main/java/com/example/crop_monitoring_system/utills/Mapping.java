@@ -1,7 +1,10 @@
 package com.example.crop_monitoring_system.utills;
 
 import com.example.crop_monitoring_system.dto.impl.*;
+import com.example.crop_monitoring_system.entity.States;
 import com.example.crop_monitoring_system.entity.impl.*;
+import com.example.crop_monitoring_system.service.StaffService;
+import com.example.crop_monitoring_system.service.impl.StaffServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,6 +51,8 @@ public class Mapping {
 
     //Vehicle
     public VehicleDTO toVehicleDTO(VehicleEntity vehicleEntity){return modelMapper.map(vehicleEntity, VehicleDTO.class);}
-    public VehicleEntity toVehicleEntity(VehicleDTO vehicleDTO){return modelMapper.map(vehicleDTO, VehicleEntity.class);}
+    public VehicleEntity toVehicleEntity(VehicleDTO vehicleDTO){
+       return modelMapper.map(vehicleDTO, VehicleEntity.class);
+    }
     public List<VehicleDTO> toVehicleDTOList(List<VehicleEntity> vehicleEntities){return vehicleEntities.stream().map(this::toVehicleDTO).toList();}
 }

@@ -25,7 +25,7 @@ public class VehicleEntity implements SuperEntity {
     private States state;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id")
+    @JoinColumn(name = "staff_id", nullable = true)
     private StaffEntity staff;
 
     private String remark;
