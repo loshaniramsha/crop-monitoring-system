@@ -1,4 +1,7 @@
+🌾 Crop Monitoring System
+
 API Documentation :-
+https://documenter.getpostman.com/view/36189347/2sAYBbcoRv
 
 Crop-Monitoring system frontend :-
 https://github.com/loshaniramsha/crop-monitoring-system-frontend.git
@@ -60,4 +63,7 @@ Analytics for understanding usage patterns and improving system performance.
 12. Multi-Language Support (Optional)
 Support for multiple languages to cater to diverse user bases.
 
+License
+
+This project is licensed under the MIT License.
 
