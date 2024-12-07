@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@RequiredArgsConstructor
+@RequiredArgsConstructor  //
 public class SecurityConfig {
     private final UserService userService;
     private final JWTConfigFilter jwtConfigFilter;
